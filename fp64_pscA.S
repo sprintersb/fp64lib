@@ -29,10 +29,6 @@
    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
    POSSIBILITY OF SUCH DAMAGE. */
 
-/* $Id$ */
-
-#if !defined(__AVR_TINY__)
-
 #include "fp64def.h"
 #include "asmdef.h"
 
@@ -57,5 +53,3 @@ ENTRY   __fp64_pscA
 	clc
 	ret
 ENDFUNC
-
-#endif /* !defined(__AVR_TINY__) */

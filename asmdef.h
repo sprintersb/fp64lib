@@ -48,7 +48,7 @@ _U(\name):
 .endm
 
 /* swap two words with the help of r0/r1 */
-.macro _SWAPW	dst, src	
+.macro _SWAPW	dst, src
 	X_movw r0, \src
 	X_movw \src, \dst
 	X_movw \dst, r0

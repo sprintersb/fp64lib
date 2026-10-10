@@ -29,10 +29,6 @@
   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
   POSSIBILITY OF SUCH DAMAGE. */
 
-/* $Id$ */
-
-#if !defined(__AVR_TINY__)
-
 #include "fp64def.h"
 #include "asmdef.h"
 
@@ -50,8 +46,6 @@ ENTRY fp64_isinf
 	brne	2f			; NaN
 	brtc	1f			; +Inf -->  0 + 1 = +1
 	sbiw	r24, 2		; -Inf --> -2 + 1 = -1
-1:	inc	r24				
+1:	inc	r24
 2:	ret
 ENDFUNC
-
-#endif /* !defined(__AVR_TINY__) */

@@ -29,10 +29,6 @@
    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
    POSSIBILITY OF SUCH DAMAGE. */
 
-/* $Id$ */
-
-#if !defined(__AVR_TINY__)
-
 #include "fp64def.h"
 #include "asmdef.h"
 
@@ -52,7 +48,7 @@ ENTRY fp64_fdim
 	mov	r0, rA7
 	or	r0, rB7
 	brmi	2f
-	
+
 	; A >= 0 and B >= 0
 	XCALL _U(__fp64_cpcAB)	; is B > A ? (or: is A-B < 0?)
 	cpc	rA7, rB7
@@ -63,7 +59,7 @@ ENTRY fp64_fdim
 2:	XCALL _U(__fp64_cpcBA)	; is A > B?
 	cpc	rB7, rA7
 	brcc 1b				; no --> A-B > 0, return A-B
-	
+
 	; handle here all cases of A-B < 0
 	; before 0 return, check if A or B is NaN
 3:	ldi	ZL, 0xf0	; hlo8(Inf)
@@ -73,10 +69,10 @@ ENTRY fp64_fdim
 	cpc	ZL, rA6
 	cpc	ZH, rA7
 	brlo	.L_nan
-  
+
 	; check B for NaN
 	push rB7
-	lsl	rB7			; get rid of sign of B			
+	lsl	rB7			; get rid of sign of B
 	XCALL _U(__fp64_cpc0B5)
 	cpc	ZL, rB6
 	cpc	ZH, rB7
@@ -88,5 +84,3 @@ ENTRY fp64_fdim
 	; A or B is NaN --> fp64_dim(A,B) is NaN
 .L_nan:	XJMP	_U(__fp64_nan)
 ENDFUNC
-
-#endif /* !defined(__AVR_TINY__) */

@@ -26,25 +26,21 @@
    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
    POSSIBILITY OF SUCH DAMAGE. */
 
-/* $Id$ */
-
-#if !defined(__AVR_TINY__)
-
 #include "fp64def.h"
 #include "asmdef.h"
 
 /* float64_t fp64_exp10 (float64_t x);
      The fp64_exp10() function returns the value of 10
-     raised to the power of x, i.e. 10^x. 
+     raised to the power of x, i.e. 10^x.
  */
- 
+
 FUNCTION fp64_exp10
 ENTRY fp64_exp10
 ENTRY fp64_pow10
 GCC_ENTRY __exp10
 GCC_ENTRY __pow10
 	XCALL _U(__fp64_pushB)		; preserve registers
-	
+
 #ifdef ARDUINO_AVR_MEGA2560
 	in ZL, RAMPZ
 	push ZL
@@ -57,7 +53,7 @@ GCC_ENTRY __pow10
 #ifdef ARDUINO_AVR_MEGA2560
 	pop r0
 	out RAMPZ, r0	; restore RAMPZ
-#endif	
+#endif
 
 	XCALL _U(fp64_mul)
 	XCALL _U(__fp64_popB)
@@ -68,5 +64,3 @@ GCC_ENTRY __pow10
 	.byte 0x40, 0x02, 0x6B, 0xB1, 0xBB, 0xB5, 0x55, 0x16
 
 ENDFUNC
-
-#endif /* !defined(__AVR_TINY__) */

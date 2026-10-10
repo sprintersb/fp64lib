@@ -51,14 +51,14 @@
 FUNCTION fp64_frexp
 	; handle NaN or +/-Inf
 .L_nf:
-	breq 0f						; +/-Inf? 
+	breq 0f						; +/-Inf?
 	XJMP _U(__fp64_nan)			; no, return NaN
 0:	XJMP _U(__fp64_inf)			; yes, return +/-Inf
 
 .L_zero:
 	bld	rA7, 7					; restore sign and return (rA7..rA0 are all == 0)
 	ret
-		
+
 ENTRY fp64_frexp
 GCC_ENTRY __frexp
 	X_movw	XL, rB6			; move pointer to one of the pointer registers
@@ -73,9 +73,9 @@ GCC_ENTRY __frexp
 1:	XCALL _U(__fp64_splitA)
 	brcs .L_nf				; if NaN or Inf, return the same value
 	breq .L_zero			; return 0
-	
+
 	; rcall __fp64_saveAB
-	
+
 	subi rAE0, lo8(1022)	; remove base 1023 - 1 from exponent
 	sbci rAE1, hi8(1022)	; (-1 as result is in [0.5;1) )
 #ifdef __AVR_ERRATA_SKIP_JMP_CALL__
@@ -85,10 +85,10 @@ GCC_ENTRY __frexp
 	sbrs rA6, 7				; is x a subnormal number
 #endif
 	XCALL _U(__fp64_norm2)	; yes: normalize it
-	
+
 	adiw	XL, 0			; skip if pointer is == NULL
 	breq	2f
-	st X+, rAE0				; save the exponent 
+	st X+, rAE0				; save the exponent
 	st X, rAE1
 
 2:	; normalize the number to be in the range [0.5, 1)
