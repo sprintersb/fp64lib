@@ -75,9 +75,11 @@
 	;  8a |   +any   |   +/-0    | +PI/2
 	;  8b |   -any   |   +/-0    | -PI/2
  */
-#if !defined(__AVR_TINY__)
+
 #include "fp64def.h"
 #include "asmdef.h"
+
+.require_lpmx
 
 FUNCTION fp64_atan2
 .L_nf:
@@ -271,5 +273,3 @@ GCC_ENTRY __atan2
 .L_pi:		; PI = 3.1415926535897932
 	.byte 0x40, 0x09, 0x21, 0xfb, 0x54, 0x44, 0x2d, 0x18
 ENDFUNC
-
-#endif /* !defined(__AVR_TINY__) */

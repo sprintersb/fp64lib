@@ -1,4 +1,5 @@
 /* Copyright (c) 2019-2020  Uwe Bissinger
+   Copyright (c) 2026  Georg-Johann Lay
    Based on 32bit floating point arithmetic routines which are:
    Copyright (c) 2002  Michael Stumpf  <mistumpf@de.pepperl-fuchs.com>
    Copyright (c) 2006  Dmitry Xmelkov
@@ -73,7 +74,7 @@ FUNCTION fp64_pow
 ENTRY fp64_pow
 GCC_ENTRY __pow
 	; ZH.ZL := exponent of y without sign
-	movw ZL, rB6				; save exponent and sign
+	X_movw ZL, rB6				; save exponent and sign
 	andi ZH, 0x7f				; get rid of sign bit
 	XCALL _U(__fp64_isBzero)	
 	cpc ZH, r1					; __fp64_isBzero only checks for rB6..rB0
@@ -130,7 +131,7 @@ GCC_ENTRY __pow
 1:	; here y/B is between 1 and 2^52
 	; now check, whether y is an integer
 	; first get the exponent of y
-	movw rBE0, rB6 				; get exponent from rB7.rB6 into rBE1.rBE0
+	X_movw rBE0, rB6			; get exponent from rB7.rB6 into rBE1.rBE0
     andi rBE0, 0xf0 			; get rid of mantissa bits in exponent
   
 	lsr  rBE1       			; mov exponent downwards 4 bits
@@ -196,15 +197,12 @@ GCC_ENTRY __pow
 	ldi ZH, hi8(.L_mask)
 	adc ZH, r1					; take care of any overflows
 
-#ifdef ARDUINO_AVR_MEGA2560
+#ifdef EIND
 	adc r0, r1					; extend to 256MB address calculation
 	lsr r0							; PC addresses words, so divide target address by 2
 	ror ZH	 						
 	ror ZL
-	;in r1, EIND					; save previous content of EIND
-	;push r1
-	;clr r1
-	out EIND, r0				; set upper byte of 24-bit address
+	out EIND_IO_ADDR, r0				; set upper byte of 24-bit address
 	pop r0
 	
 	eijmp							; and clear out the bits top to bottom
@@ -300,10 +298,6 @@ GCC_ENTRY __pow
 .L_a0:
 	or r0, rB0
 .L_check:
-#ifdef ARDUINO_AVR_MEGA2560
-	;pop ZH						; reset EIND to previous content 
-	;out EIND, ZH				
-#endif	
 	; here Z is set if r0<>0 --> y has a fraction
 	brne .L_nan2				; if y has a fraction, then x^y is not defined
 

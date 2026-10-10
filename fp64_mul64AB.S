@@ -1,4 +1,5 @@
 /* Copyright (c) 2018-2020  Uwe Bissinger
+   Copyright (c) 2026 Georg-Johann Lay
    All rights reserved.
 
    Redistribution and use in source and binary forms, with or without
@@ -31,6 +32,7 @@
 #include "fp64def.h"
 #include "asmdef.h"
 
+.require_mul
 
 /*  uint64_t __fp64_mul64AB (uint64_t A, B);
     return top 64 bit of unsigned multiplication C = A*B

@@ -96,10 +96,10 @@ ENTRY __fp64_saveB
 	ret
 
 ENTRY __fp64_saveABC
-	rcall __fp64_saveC
+	XCALL __fp64_saveC
 	
 ENTRY __fp64_saveAB
-	rcall __fp64_saveB
+	XCALL __fp64_saveB
 	
 ENTRY __fp64_saveA
 	sts __ar0, r0
@@ -155,7 +155,7 @@ ENTRY __fp64_saveMul
 	ret
 	
 ENTRY __fp64_saveDiv
-	call __fp64_saveA
+	XCALL __fp64_saveA
 	push r0
 	sts __b_m+6, r0
 	in	r0, 0x3f
@@ -178,13 +178,13 @@ ENTRY __fp64_saveDiv
 	ret
 	
 ENTRY __fp64_debugA
-	call __fp64_saveA
+	XCALL __fp64_saveA
 	ldi	r24, lo8(__a_sreg)
 	ldi r25, hi8(__a_sreg)
 	ret
 
 ENTRY __fp64_debugAB
-	call __fp64_saveAB
+	XCALL __fp64_saveAB
 	ldi	r24, lo8(__a_sreg)
 	ldi r25, hi8(__a_sreg)
 	ret
@@ -238,7 +238,7 @@ ENTRY __fp64_proxy1_int32
 ENTRY __fp64_proxy1_int64
 	sts __function, rA7
 	sts __function+1, rA6
-	movw ZL, rA4
+	X_movw ZL, rA4
 	ld rA0, Z+
 	ld rA1, Z+
 	ld rA2, Z+
@@ -262,11 +262,11 @@ ENTRY __fp64_after
 
 ENTRY __fp64_proxy2
 ENTRY __fp64_proxy2_int8
-	rcall __fp64_saveAB
+	XCALL __fp64_saveAB
 	sts __function, rA7
 	sts __function+1, rA6
 	XCALL _U(__fp64_pushB)
-	movw ZL, rA2
+	X_movw ZL, rA2
 	ld rB0, Z+
 	ld rB1, Z+
 	ld rB2, Z+

@@ -31,6 +31,8 @@
 #include "fp64def.h"
 #include "asmdef.h"
 
+.require_lpmx
+
 FUNCTION __fp64_ldb_pi2
 
 /*	float64_t_intern __fp64_ldb_pi2x()

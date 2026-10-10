@@ -29,12 +29,10 @@
    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
    POSSIBILITY OF SUCH DAMAGE. */
 
-/* $Id$ */
-
-#if !defined(__AVR_TINY__)
-
 #include "fp64def.h"
 #include "asmdef.h"
+
+.require_lpmx
 
 /* float64_t __fp64_powser (float64_t_intern x, float64_t_intern* XH.XL);
      The __fp64_powser() function calculates the polynom using the horner
@@ -329,4 +327,3 @@ ENTRY __fp64_saveZ
 #else
 .L_saveZ:	.skip 2			; scratch area to save pointer to table
 #endif 
-#endif /* !defined(__AVR_TINY__) */

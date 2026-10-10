@@ -1,4 +1,5 @@
 /* Copyright (c) 2019-2020  Uwe Bissinger
+   Copyright (c) 2026  Georg-Johann Lay
    All rights reserved.
 
    Redistribution and use in source and binary forms, with or without
@@ -55,7 +56,7 @@
      fp64_trunc(-1.9) --> -1.0
  */
  
- #if !defined(__AVR_TINY__)
+#if !defined(__AVR_TINY__)
 
 #include "fp64def.h"
 #include "asmdef.h"
@@ -117,12 +118,12 @@ ENTRY   fp64_cut_noninteger_fraction
 	ldi ZH, hi8(.L_mask)
 	adc ZH, r1					; take care of any overflows
 
-#ifdef ARDUINO_AVR_MEGA2560
+#ifdef EIND
 	adc r0, r1					; extend to 256MB address calculation
-	lsr r0							; PC addresses words, so divide target address by 2
+	lsr r0						; PC addresses words, so divide target address by 2
 	ror ZH	 						
 	ror ZL
-	out  EIND, r0
+	out  EIND_IO_ADDR, r0
 	eijmp
 #else
 	; rcall __fp64_saveAB
@@ -164,9 +165,6 @@ ENTRY   fp64_cut_noninteger_fraction
 	pop rAE0
 
 .L_ret:
-#ifdef ARDUINO_AVR_MEGA2560
-	; out  EIND, r1	; reset EIND
-#endif	
 
 	subi rAE0, -0xff			; add base 1023
 	sbci rAE1, -0x04

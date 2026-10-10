@@ -251,7 +251,7 @@ __fp64_add_pse_r0:
 	bld rA7, 7
 	sbrc rA7, 7				; sign(a) != sign(b), cases 2,3
 	eor r0, rA7				; yes, we have to do swap the operation
-	call .L_sign			; sign(result) = sign(A)
+	rcall .L_sign			; sign(result) = sign(A)
 	;call __fp64_saveAB
 	rjmp 4f
 	
@@ -324,7 +324,7 @@ __fp64_add_pse_r0:
 .L_zr:	; exponent is zero, but topmost bit is still not set --> subnormal number
 	; or A+(-A)
 	XCALL _U(__fp64_zero)	; return 0
-	movw rAE0, rA0			; also in internal format
+	X_movw rAE0, rA0		; also in internal format
 	sec						; set carry to indicate overflow and for already packed result
 	ret
 

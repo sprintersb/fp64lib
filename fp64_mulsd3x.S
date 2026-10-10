@@ -48,10 +48,10 @@
 	die routinen hier runden nicht
  */
 
-#if	defined(__AVR_ENHANCED__) && __AVR_ENHANCED__
-
 #include "fp64def.h"
 #include "asmdef.h"
+
+.require_mul
 
 FUNCTION __fp64_mulsd3x
 
@@ -107,8 +107,8 @@ ENTRY fp64_mul
 GCC_ENTRY __muldf3
 ENTRY   __fp64_mulsd3x
 	XCALL _U(__fp64_pushB)
-	XCALL	_U(__fp64_split3)	; split A and B into parts for exponent and mantissa
-	brcs	0b					; A or B is NaN and/or InF --> manage special result
+	XCALL	_U(__fp64_split3)	; split A and B into parts for expo and mantissa
+	brcs	0b					; A or B is NaN and/or InF -> special result
 	
 	push rR5	; save working registers
 	push rR6
@@ -486,5 +486,3 @@ ENTRY   __fp64_mulsd3_pse0			; post split entry for Z flag already set
 	ror rR5
 	ret
 	ENDFUNC
-
-#endif /* !defined(__AVR_TINY__) */

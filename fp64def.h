@@ -1,4 +1,5 @@
 /* Copyright (c) 2019-2020  Uwe Bissinger
+   Copyright (c) 2026  Georg-Johann Lay
    All rights reserved.
 
    Redistribution and use in source and binary forms, with or without
@@ -30,22 +31,9 @@
 
 /* Interprocedure convensions. In separate file: for math library
    developers.	*/
-#if (!defined(__AVR_ATmega328P__) || defined(__AVR_TINY__) || !defined(__AVR_ENHANCED__)) && !defined(ARDUINO_AVR_MEGA2560) &&!defined(__AVR_MEGA__)
-#error fp64lib is created and tested only for Atmel AVR 328p microprocessors like Arduino UNO or Nano
-#endif
    
 #ifndef	_FP64DEF_H
 #define	_FP64DEF_H
-
-//#include "sectionname.h"
-#ifdef ARDUINO_AVR_MEGA2560
-#ifndef RAMPZ
-#define RAMPZ	0x3b
-#endif
-#ifndef EIND
-#define EIND 0x3c
-#endif
-#endif
 
 /*
 Registers 

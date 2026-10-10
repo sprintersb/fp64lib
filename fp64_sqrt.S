@@ -56,7 +56,6 @@ FUNCTION fp64_sqrt
 
 ENTRY fp64_sqrt
 GCC_ENTRY __sqrt
-ALIAS_ENTRY fp64_sqrtf
   ; split and check arg.
 	XCALL	_U(__fp64_splitA)
 	; call __fp64_saveA

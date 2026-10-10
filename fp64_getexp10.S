@@ -1,4 +1,5 @@
 /* Copyright (c) 2019-2020  Uwe Bissinger
+   Copyright (c) 2026  Georg-Johann Lay
    All rights reserved.
 
    Redistribution and use in source and binary forms, with or without
@@ -30,6 +31,8 @@
 
 #include "fp64def.h"
 #include "asmdef.h"
+
+.require_mul
 
 /*  int16_t __fp64_getExp10(int16_t n);
 	int16_t __fp64_getExp10r(int16_t n);
