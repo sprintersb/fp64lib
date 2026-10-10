@@ -37,9 +37,8 @@
      "not-a-number" (NaN), and 0 otherwise.
  */
 
-FUNCTION fp64_isnan
 ENTRY fp64_isnan
-GCC_ENTRY __unorddf2
+ENTRY_DOUBLE isnan isnanf
 	XCALL	_U(__fp64_splitA)
 	ldi	r24, 0
 	ldi	r25, 0

@@ -34,11 +34,36 @@
 
 #include_next "asmdef.h"
 
-/* Create an entry that is use by GCC standard arithmetik */
+;;; An entry for a function that would usually live in GCC's libgcc.
 .macro  GCC_ENTRY name
-	.global	_U(\name)
-_U(\name):
+	.global	\name
+	.type	\name, "function"
+\name:
 .endm
+
+;;; An entry for a function from math.h, FD for double and FL for long double.
+;;; Other than ENTRY_FLOAT, we don't .weak-en the symbol so that it is
+;;; stronger than libgcc/libf7's, which are all weak.
+.macro  ENTRY_DOUBLE fd, fl
+#if __SIZEOF_DOUBLE__ == 8
+	.global	\fd
+	.type	\fd, "function"
+#ifdef HAVE_LD_GNU_ATTRIBUTE_8
+	.gnu_attribute Tag_GNU_AVR_BITS_DOUBLE,64
+#endif
+\fd:
+#endif /* __SIZEOF_DOUBLE__ == 8 */
+
+#if __SIZEOF_LONG_DOUBLE__ == 8
+	.global	\fl
+	.type	\fl, "function"
+#ifdef HAVE_LD_GNU_ATTRIBUTE_12
+	.gnu_attribute Tag_GNU_AVR_BITS_LONG_DOUBLE,64
+#endif
+\fl:
+#endif /* __SIZEOF_LONG_DOUBLE__ == 8 */
+.endm
+
 
 /* swap two registers without need of temporary register */
 .macro _SWAP	dst, src
@@ -56,6 +81,9 @@ _U(\name):
 
 /* alias to be compatible with AVR programming manual */
 #define byte3(x)	hh8(x)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Chicken out when the code demands more than the hardware can do.
 
 #if __AVR_TINY__
     .end

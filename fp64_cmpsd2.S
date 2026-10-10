@@ -49,7 +49,7 @@ FUNCTION fp64_compare
    where we should always return nonzero for EQ/NE, -1 for GT/GE,
    1 for LT/LE).  -MM 2000-11-18 */
 
-ENTRY	fp64_compare
+ENTRY fp64_compare
 ENTRY   __fp64_cmpsd2
 GCC_ENTRY  __eqdf2
 GCC_ENTRY  __nedf2

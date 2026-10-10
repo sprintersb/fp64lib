@@ -88,8 +88,8 @@ FUNCTION fp64_lround
 	rjmp .L_sign
 	ret
 
-ENTRY	fp64_lround
-GCC_ENTRY __lround
+ENTRY fp64_lround
+ENTRY_DOUBLE lround lroundl
 	XCALL _U(__fp64_splitA)
 	brcs .L_err					; handle cases 1&2: NaN and +/-INF
 	breq .L_zr					; case 3: return 0 for 0

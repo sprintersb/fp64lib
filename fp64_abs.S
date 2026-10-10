@@ -36,7 +36,7 @@
  */
 
 FUNCTION fp64_abs
-ENTRY   fp64_abs
+ENTRY fp64_abs
 	andi	rA7, 0x7f	; clear sign bit
 	ret
 ENDFUNC

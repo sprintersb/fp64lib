@@ -48,7 +48,7 @@ FUNCTION fp64_sd
 	XJMP	_U(__fp64_nan)	; else return NaN
 8:	XJMP	_U(__fp64_inf)	; return Inf with sign(a)
 
-ENTRY	fp64_sd
+ENTRY fp64_sd
 GCC_ENTRY __extendsfdf2
 	clr rA3						; clear lower mantissa bits
 	clr rA2

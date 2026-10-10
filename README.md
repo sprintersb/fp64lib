@@ -31,7 +31,7 @@ header could be supplied as a convenience.
 * Integrate fp64lib into the AVR-LibC build system &check;
 * Fix all build errors and warnings &check;
 * The previous point has beed achieved by inserting `.end`
-directives when ISA festures are required that fp64lib doesn't
+directives when ISA features are required that fp64lib doesn't
 support yet:
    * MUL: `.require_mul`
    * LPMx, ELPMx: `.require_lpmx`
@@ -39,16 +39,11 @@ support yet:
   The goal is to generalize the implementation such that these
 markers can be removed.
 * Adjust the ABI such that
-  * Functions match the GCC ABI and `<math.h>` interface.
-  * Set `.gnu_attribute` as appropriate
+  * Functions match the GCC ABI and `<math.h>` interface &check;
+  * Set `.gnu_attribute` as appropriate &check;
   * Avoid namespace pollution by using a `__` namespace for globals.
 * Don't mix lookup tables and executable code &check;
 * Fix EIND usage and related ABI breakage.
 * Fix RAMPZ usage and related ABI breakage.
 * Fix Arduino related stuff like `#ifdef ARDUINO_AVR_MEGA2560`.
 * Fix non-reentrant anti patterns.
-
-
-
-
-

@@ -142,8 +142,8 @@ FUNCTION fp64_atan2
 	XCALL _U(__fp64_popB)
 	XJMP _U(__fp64_szero)
 
-ENTRY   fp64_atan2
-GCC_ENTRY __atan2
+ENTRY fp64_atan2
+ENTRY_DOUBLE atan2 atan2l
 	XCALL _U(__fp64_pushB)
 	XCALL	_U(__fp64_split3)
 	; rcall __fp64_saveAB

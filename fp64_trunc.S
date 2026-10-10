@@ -70,9 +70,9 @@ FUNCTION fp64_trunc
 .L_zr:
 	XJMP _U(__fp64_szero)		; case 4&5: return +/- 0
 
-ENTRY	fp64_trunc
-GCC_ENTRY __trunc
-ENTRY   fp64_cut_noninteger_fraction
+ENTRY fp64_trunc
+ENTRY_DOUBLE trunc truncl
+ENTRY fp64_cut_noninteger_fraction
 	XCALL _U(__fp64_splitA)
 	brcs .L_NaN					; handle NaN and +/-INF
 	breq .L_zr					; case 4, 5: return 0 for 0

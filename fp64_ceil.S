@@ -70,8 +70,8 @@ FUNCTION fp64_ceil
 .L_one:
 	XJMP _U(__fp64_one)			; case 4: return 1.0 for x < 1.0
 
-ENTRY	fp64_ceil
-GCC_ENTRY __ceil
+ENTRY fp64_ceil
+ENTRY_DOUBLE ceil ceill
 	sbrc rA7, 7					; negative number? (including -NaN, -Inf, -0)
 	XJMP _U(fp64_trunc)			; yes, case 0: return trunc(x)
 	XCALL _U(__fp64_splitA)

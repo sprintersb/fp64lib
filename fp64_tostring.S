@@ -98,7 +98,7 @@ FUNCTION fp64_to_string
 	pop rPrec
 	ret							; and return with r24:r25 pointing to result
 
-ENTRY   fp64_to_string
+ENTRY fp64_to_string
 	push rPrec					; ABI requires anything below r18 to be saved
 	push rNrd
 	push rFlags
