@@ -42,7 +42,7 @@ markers can be removed.
   * Functions match the GCC ABI and `<math.h>` interface.
   * Set `.gnu_attribute` as appropriate
   * Avoid namespace pollution by using a `__` namespace for globals.
-* Don't mix lookup tables and executable code.
+* Don't mix lookup tables and executable code &check;
 * Fix EIND usage and related ABI breakage.
 * Fix RAMPZ usage and related ABI breakage.
 * Fix Arduino related stuff like `#ifdef ARDUINO_AVR_MEGA2560`.

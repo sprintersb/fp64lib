@@ -186,8 +186,11 @@ ENTRY __fp64_getExp10int
 	out RAMPZ, ZL	; reset RAMPZ as required by gcc calling conventions
 #endif
 	ret
+ENDFUNC
 
-.L_exc:	; list of exp values where approximation needs to be corrected
+	PGMX_SECTION(fp64lib.getexp10)
+
+OBJECT .L_exc	; list of exp values where approximation needs to be corrected
 		.word 196, 299, 392, 495, 588, 598, 681, 691, 784
 		.word 794, 877, 887, 897, 980, 990, 1000, 0x7fff
-ENDFUNC
+ENDOBJ .L_exc

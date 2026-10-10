@@ -51,7 +51,11 @@ ENTRY __fp64_ldb_1
 	ldi ZL, lo8(.L_const_1)
 	ldi ZH, hi8(.L_const_1)
 	XJMP _U(__fp64_ldb_const)
-
-	; +1.0 with 56 bits precision in unpacked format
-.L_const_1:	.byte  0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0xff
 ENDFUNC
+
+	PGMX_SECTION(fp64lib.ldb_1)
+
+OBJECT .L_const_1
+	; +1.0 with 56 bits precision in unpacked format
+	.byte  0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0xff
+ENDOBJ .L_const_1

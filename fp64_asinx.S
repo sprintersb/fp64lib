@@ -303,9 +303,11 @@ GCC_ENTRY __asin
 	; rcall __fp64_saveAB
 	XCALL _U(__fp64_add_pse)	; compute res + pi/2 or -res + pi
 	rjmp 19b
+ENDFUNC
 
+	PGMX_SECTION(fp64lib.asinx)
 
-.L_tableAsinNom:
+OBJECT .L_tableAsinNom
 	; Ideal polynom:
 	; + 0.0000084705471128435769021718764878041684288 * x^5
 	; + 0.0012557428614630796315205218507940285622 * x^4
@@ -320,9 +322,9 @@ GCC_ENTRY __asin
 	.byte 0x00, 0xb4, 0xaf, 0x94, 0x40, 0xcb, 0x86, 0x69, 0x03, 0xfd	;  0.35290206232981519813422591897720574012
 	.byte 0x80, 0x84, 0x82, 0x8c, 0x7f, 0xa2, 0xf6, 0x65, 0x03, 0xff	; -1.035234033892197619275421516249480191618
 	.byte 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0xff	;  1.0000000000000000000000000000000000000000
-	.byte 0x00												; byte needed for code alignment to even adresses!
+ENDOBJ .L_tableAsinNom
 
-.L_tableAsinDenom:
+OBJECT .L_tableAsinDenom
 	; Ideal polynom:
 	; + 0.0028820878185134035637440105959294542908 *x^4
 	; - 0.06355588484963171659942148390 * x^3
@@ -335,9 +337,8 @@ GCC_ENTRY __asin
 	.byte 0x00, 0xda, 0xcf, 0xb7, 0xb5, 0x4c, 0x0d, 0xee, 0x03, 0xfd	;  0.4273660095987244916804215222327911760658
 	.byte 0x80, 0x8f, 0x2d, 0x37, 0x2a, 0x4d, 0xa1, 0x57, 0x03, 0xff	; -1.118567367225532932506482097778643947095
 	.byte 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0xff	;  1.0000000000000000000000000000000000000000
-	.byte 0x00												; byte needed for code alignment to even adresses!
+ENDOBJ .L_tableAsinDenom
 
-ENDFUNC
 
 .data
 __sinFlags:	 .skip 1
