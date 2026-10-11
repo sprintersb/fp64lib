@@ -79,6 +79,21 @@
 	X_movw \dst, r0
 .endm
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Handling 3-byte PC and XICALL according to the AVR GCC ABI
+;;; The ABI disallows to change EIND since it would break all
+;;; kind of stuff like ISRs.
+
+#if defined (__AVR_2_BYTE_PC__)
+#define PC_SIZE 2
+#elif defined (__AVR_3_BYTE_PC__)
+#define PC_SIZE 3
+#else
+#error PC_SIZE
+#endif /* PC_SIZE */
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Loading constants from program memory
 /*  This is a bit of a mess.  We have the following functions:

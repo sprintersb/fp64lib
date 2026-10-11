@@ -43,7 +43,8 @@ markers can be removed.
   * Set `.gnu_attribute` as appropriate &check;
   * Avoid namespace pollution by using a `__` namespace for globals.
 * Don't mix lookup tables and executable code &check;
-* Fix EIND usage and related ABI breakage.
+* Don't put @function symbols in data sections &check;
+* Fix EIND usage and related ABI breakage &check;
 * Fix RAMPZ usage and related ABI breakage &check;
-* Fix Arduino related stuff like `#ifdef ARDUINO_AVR_MEGA2560`.
+* Fix Arduino related stuff like `#ifdef ARDUINO_AVR_MEGA2560` &check;
 * Fix non-reentrant anti patterns.

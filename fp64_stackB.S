@@ -50,7 +50,7 @@ ENTRY __fp64_pushB
 
 	pop r0						; get return address
 	pop r1
-#if defined (ARDUINO_AVR_MEGA2560)
+#if PC_SIZE == 3
 	sts  __fp64_saver01+2, r0
 	pop r0
 #endif
@@ -74,20 +74,21 @@ ENTRY __fp64_pushB_int
    Input:
      none
    Return:
-     rB7.rB6.rB5.rB4.rB3.rB2.rB1.rB0  - B restored from stack, as originally pushed by __fp64_pushB
+     rB7.rB6.rB5.rB4.rB3.rB2.rB1.rB0  - B restored from stack, as
+                                        originally pushed by __fp64_pushB
 	Modifies:
 	 nothing - also SREG is preserved
  */
 
 ENTRY   __fp64_popB
 	;call __fp64_saveAB
-	sts __fp64_saver01, r0	; save r0 & r1
-	sts __fp64_saver01+1, r1
+	sts __fp64_saver01 + 0, r0	; save r0 & r1
+	sts __fp64_saver01 + 1, r1
 
 	pop r0				; get return address
 	pop r1
-#if defined (ARDUINO_AVR_MEGA2560)
-	sts  __fp64_saver01+2, r0
+#if PC_SIZE == 3
+	sts  __fp64_saver01 + 2, r0
 	pop r0
 #endif
 
@@ -102,15 +103,15 @@ ENTRY   __fp64_popB
 
 ENTRY __fp64_L_ret
 .L_ret:					; restore return address, r0&r1 and return to caller
-#if defined (ARDUINO_AVR_MEGA2560)
+#if PC_SIZE == 3
 	push r0
-	lds r0, __fp64_saver01+2
+	lds r0, __fp64_saver01 + 2
 #endif
 	push r1				; push return address back to stack
 	push r0
 
-	lds r1, __fp64_saver01+1	; retore r0 & r1
-	lds r0, __fp64_saver01
+	lds r1, __fp64_saver01 + 1	; restore r0 & r1
+	lds r0, __fp64_saver01 + 0
 	ret
 
 /* __fp64_popBret() restore B register set and return
@@ -119,7 +120,8 @@ ENTRY __fp64_L_ret
 	Input:
 		none
 	Return:
-		rB7.rB6.rB5.rB4.rB3.rB2.rB1.rB0  - B restored from stack, as originally pushed by __fp64_pushB
+		rB7.rB6.rB5.rB4.rB3.rB2.rB1.rB0  - B restored from stack, as
+                                           originally pushed by __fp64_pushB
 	Modifies:
 		nothing - also SREG is preserved
  */
@@ -138,5 +140,5 @@ ENDFUNC
 
 .bss
 OBJECT .global __fp64_saver01
-	.skip 3
+	.skip PC_SIZE
 ENDOBJ __fp64_saver01

@@ -139,20 +139,20 @@ ENTRY_DOUBLE pow powl
 	lsr  rBE1
 	ror  rBE0
 
-	subi rBE0, lo8(1023)		; remove exponent bias: exp -= 1023
+	subi rBE0, lo8(1023)	; remove exponent bias: exp -= 1023
 	sbci rBE1, hi8(1023)
 	; rcall __fp64_saveAB
 
 	; now rBE1.rBE0 is < 53 --> rBE0 is < 53, rBE1 can be used
-	mov rBE1, rBE0 				; save the exponent
+	mov rBE1, rBE0 			; save the exponent
 
 	; we have to separate between rBE0 < 4 and >=4
-	push rB7 					; rB7 will now be used as a bitmask for the fraction bits
-	ldi rB7, 0x0f				; load mask to be used on rB6 for 0 <= exponent < 4
+	push rB7 				; use rB7 as a bitmask for the fraction bits
+	ldi rB7, 0x0f			; load mask to be used on rB6 for 0 <= exponent < 4
 	cpi rBE0, 4
 	brlo 3f
-	ldi rB7, 0xff				; load mask to be used on rB5..rB0 for exponent >= 4
-	subi rBE0, 4				; round down to nearest 8 bits
+	ldi rB7, 0xff			; load mask to be used on rB5..rB0 for exponent >= 4
+	subi rBE0, 4			; round down to nearest 8 bits
 	andi rBE0, 0x07
 
 3:  ; now rB7 has the mask and rBE0 the exponent mod 8
@@ -179,36 +179,26 @@ ENTRY_DOUBLE pow powl
 
 5:	; rcall __fp64_saveAB
 	andi rBE1, 0xf8				; truncate lower 3 bits
-	  					        ; --> index = (exp/8)*8 as 8 byte are used for mov, mov, and, rjmp
+								; --> index = (exp/8)*8 as 8 byte are used
+								; for mov + mov + and + rjmp.
 
-#ifdef ARDUINO_AVR_MEGA2560
-	push r0
-	ldi ZL, byte3(.L_mask)
-	mov r0, ZL
-	;XCALL __fp64_saveAB
-#endif
-
-	ldi ZL, lo8(.L_mask)		; add 8*offset to jump table
-	add ZL, rBE1
-	ldi ZH, hi8(.L_mask)
-	adc ZH, r1					; take care of any overflows
-
-#ifdef EIND
-	adc r0, r1					; extend to 256MB address calculation
-	lsr r0							; PC addresses words, so divide target address by 2
-	ror ZH
-	ror ZL
-	out EIND_IO_ADDR, r0				; set upper byte of 24-bit address
-	pop r0
-
-	eijmp							; and clear out the bits top to bottom
-#else
-	; rcall __fp64_saveAB
-	lsr ZH						; PC addresses words, so divide target address by 2
-	ror ZL
-	ijmp							; and clear out the bits top to bottom
-#endif
-
+    ;; .L_mask is a code table with 4-word code chunks
+    ;; where rBE1 holds the byte offset into that table.
+#if PC_SIZE == 2
+    ;; Get the word offset as XIJMP needs a word address.
+    mov ZL, rBE1
+    lsr ZL
+    clr ZH
+    subi ZL, lo8(-(pm(.L_mask)))
+    sbci ZH, hi8(-(pm(.L_mask)))
+    XIJMP
+#else /* PC_SIZE == 3 */
+    ;; Mimick an indirect jump since we must not change EIND.
+    lsr rBE1  $  subi rBE1, lo8(-(pm(.L_mask)))  $  push rBE1
+    clr rBE1  $  sbci rBE1, hi8(-(pm(.L_mask)))  $  push rBE1
+    clr rBE1  $  sbci rBE1, hh8(-(pm(.L_mask)))  $  push rBE1
+    ret
+#endif /* PC_SIZE */
 
 	; return NaN
 .L_nan2:

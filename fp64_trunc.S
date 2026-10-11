@@ -81,7 +81,7 @@ ENTRY fp64_cut_noninteger_fraction
 	sbci rAE1, hi8(1023)
 	tst rAE1
 	brmi .L_zr					; 0 < |x| < 1, case 7, return 0
-	brne .L_ret				; |x| > 2^255, case 6, return x
+	brne .L_ret				    ; |x| > 2^255, case 6, return x
 	cpi rAE0, 52
 	brge .L_ret					; |x| >= 2^52, case 6, return x
 
@@ -89,9 +89,9 @@ ENTRY fp64_cut_noninteger_fraction
 	; clear out the fractional bits
 
 	ldi rA7, 0xff				; inital mask
-	ldi rAE1, 55				; counter = (52 digits + 3 saveguard digits) - exp2(x)
+	ldi rAE1, 55				; counter = (52 digits + 3 saveguards) - exp2(x)
 	sub rAE1, rAE0				; as |x| < 2^52, this is always > 1
-	andi rAE1 ,0x07
+	andi rAE1, 0x07
 0:	breq 1f
 	lsl rA7
 	dec rAE1
@@ -102,33 +102,24 @@ ENTRY fp64_cut_noninteger_fraction
 
 	push rAE0
 	andi rAE0, 0xf8				; bottom 3 bits were already used above
-	lsr rAE0					; index = (exp/8)*4 as 4 byte are used for clearing out a register
-	mov rAE1, rAE0				; take care of proper order of operation as rAE0 == ZL!
+	lsr rAE0					; index = (exp/8)*4 as 4 byte are used to clear
 
-#ifdef ARDUINO_AVR_MEGA2560
-	ldi ZL, byte3(.L_mask)
-	mov r0, ZL
-#endif
-
-	ldi ZL, lo8(.L_mask)		; add offset to jump table
-	add ZL, rAE1
-	ldi ZH, hi8(.L_mask)
-	adc ZH, r1					; take care of any overflows
-
-#ifdef EIND
-	adc r0, r1					; extend to 256MB address calculation
-	lsr r0						; PC addresses words, so divide target address by 2
-	ror ZH
-	ror ZL
-	out  EIND_IO_ADDR, r0
-	eijmp
-#else
-	; rcall __fp64_saveAB
-	lsr ZH						; PC addresses words, so divide target address by 2
-	ror ZL
-	ijmp						; and clear out the bits top to bottom
-#endif
-
+    ;; .L_mask is a code table with 2-word code chunks
+    ;; where rAE0 === ZL holds the byte offset into that table.
+#if PC_SIZE == 2
+    ;; Get 16-bit word offset.
+    lsr ZL
+    clr ZH
+    subi ZL, lo8(-(pm(.L_mask)))
+    sbci ZH, hi8(-(pm(.L_mask)))
+    XIJMP
+#else /* PC_SIZE == 3 */
+    ;; Mimick an indirect jump since we must not change EIND.
+    lsr ZL  $  subi ZL, lo8(-(pm(.L_mask)))  $  push ZL
+    clr ZL  $  sbci ZL, hi8(-(pm(.L_mask)))  $  push ZL
+    clr ZL  $  sbci ZL, hh8(-(pm(.L_mask)))  $  push ZL
+    ret
+#endif /* PC_SIZE */
 
 .L_mask:
 	; for 2^0 <= |x| < 2^8, i.e. (rAE0/8)*4 == 0
@@ -163,8 +154,8 @@ ENTRY fp64_cut_noninteger_fraction
 
 .L_ret:
 
-	subi rAE0, -0xff			; add base 1023
-	sbci rAE1, -0x04
+	subi rAE0, lo8(-1023)		; add base 1023
+	sbci rAE1, hi8(-1023)
 	XJMP _U(__fp64_pretA)		; pack and return x
 
 ENDFUNC

@@ -46,13 +46,13 @@ FUNCTION __fp64_stack
  */
 
 ENTRY __fp64_pushCB
-	sts __fp64_saver01, r0		; save r0 & r1
-	sts __fp64_saver01+1, r1
+	sts __fp64_saver01 + 0, r0		; save r0 & r1
+	sts __fp64_saver01 + 1, r1
 
 	pop r0						; get return address
 	pop r1
-#if defined (ARDUINO_AVR_MEGA2560)
-	sts  __fp64_saver01+2, r0
+#if PC_SIZE == 3
+	sts  __fp64_saver01 + 2, r0
 	pop r0
 #endif
 
@@ -74,21 +74,23 @@ ENTRY __fp64_pushCB
 	Input:
 		none
 	Return:
-		rB7.rB6.rB5.rB4.rB3.rB2.rB1.rB0  - B restored from stack, as originally pushed by __fp64_pushCB
-		rC7.rC6.rC5.rC4.rC3.rC2.rC1.rC0  - C restored from stack, as originally pushed by __fp64_pushCB
+		rB7.rB6.rB5.rB4.rB3.rB2.rB1.rB0  - B restored from stack, as
+                                           originally pushed by __fp64_pushCB
+		rC7.rC6.rC5.rC4.rC3.rC2.rC1.rC0  - C restored from stack, as
+                                           originally pushed by __fp64_pushCB
 	Modifies:
 		nothing - also SREG is preserved
  */
 
 ENTRY   __fp64_popBC
 	;call __fp64_saveAB
-	sts __fp64_saver01, r0	; save r0 & r1
-	sts __fp64_saver01+1, r1
+	sts __fp64_saver01 + 0, r0	; save r0 & r1
+	sts __fp64_saver01 + 1, r1
 
 	pop r0				; get return address
 	pop r1
-#if defined (ARDUINO_AVR_MEGA2560)
-	sts  __fp64_saver01+2, r0
+#if PC_SIZE == 3
+	sts  __fp64_saver01 + 2, r0
 	pop r0
 #endif
 
