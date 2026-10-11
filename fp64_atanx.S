@@ -45,7 +45,7 @@
 		  return 0.0 * sign(x)
 
 	  if( res >= 1.0 )
-		  // |x| >= 1:  use atan(x) + atan(1/x) = pi/2 to reduce argument to [0, 1].
+		  // |x| >= 1:  use atan(x) + atan(1/x) = pi/2 to reduce arg to [0, 1].
 		  flag = true
 		  res = 1/x
 
@@ -145,12 +145,7 @@ ENTRY_DOUBLE atan atanl
 	push rAE1
 	push rAE0
 
-#ifdef ARDUINO_AVR_MEGA2560
-	ldi XL, byte3(.L_tableAtanDenom)
-	out RAMPZ, XL
-#endif
-	ldi XL, lo8(.L_tableAtanDenom)	; calculate Denominator
-	ldi XH, hi8(.L_tableAtanDenom)
+	LPMX_INIT XL, .L_tableAtanDenom	; calculate Denominator
 	; rcall __fp64_saveAB
 	XCALL _U(__fp64_powser)
 
@@ -163,16 +158,11 @@ ENTRY_DOUBLE atan atanl
 	push rAE0
 
 	XCALL _U(__fp64_movABx)			; A = B = x2
-#ifdef ARDUINO_AVR_MEGA2560
-	ldi XL, byte3(.L_tableAtanNom)
-	out  RAMPZ, XL
-#endif
-	ldi XL, lo8(.L_tableAtanNom)	; calculate Nominator
-	ldi XH, hi8(.L_tableAtanNom)
+	LPMX_INIT XL, .L_tableAtanNom	; calculate Nominator
 	XCALL _U(__fp64_powser)			; z = horner( x2, coeff_nominator )
 	; rcall __fp64_saveAB
 
-	pop rBE0						; retrieve Denominator y = horner( x2, coeff_denominator )
+	pop rBE0						; get Denom y = horner( x2, coeff_denom )
 	pop rBE1
 	XCALL _U(__fp64_popB)
 

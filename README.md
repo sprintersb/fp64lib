@@ -44,6 +44,6 @@ markers can be removed.
   * Avoid namespace pollution by using a `__` namespace for globals.
 * Don't mix lookup tables and executable code &check;
 * Fix EIND usage and related ABI breakage.
-* Fix RAMPZ usage and related ABI breakage.
+* Fix RAMPZ usage and related ABI breakage &check;
 * Fix Arduino related stuff like `#ifdef ARDUINO_AVR_MEGA2560`.
 * Fix non-reentrant anti patterns.

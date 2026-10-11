@@ -124,12 +124,7 @@ ENTRY_DOUBLE sin sinl
 15:	; approximate sin(x) by Taylor series
 	sts __funcCode, XH
 	; rcall __fp64_saveAB
-#ifdef ARDUINO_AVR_MEGA2560
-	ldi XL, byte3(.L_tableSin)
-	out RAMPZ, XL
-#endif
-	ldi XL, lo8(.L_tableSin)
-	ldi XH, hi8(.L_tableSin)
+	LPMX_INIT XL, .L_tableSin
 	XCALL _U(__fp64_powsodd)
 
 	; restore used registers and return
@@ -165,5 +160,5 @@ OBJECT .L_tableSin
 	.byte 0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0xff ; 0x3FF0000000000000 =  0.9999999999999999997427749007994397865435536768
 ENDOBJ .L_tableSin
 
-.data
+.bss
 __funcCode:	 .skip 1

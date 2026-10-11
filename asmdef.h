@@ -79,6 +79,81 @@
 	X_movw \dst, r0
 .endm
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Loading constants from program memory
+/*  This is a bit of a mess.  We have the following functions:
+    __fp64_ldb8_const   // fp64_ldb_pi2.S
+        Load an 8-bit big-endian constant to B.
+        This is a row of XLPM Z+ insns that don't change SREG,
+        where Z is post-incremented and RAMPZ is NOT restored.
+
+    __fp64_ldb_const   // fp64_ldb_pi2.S
+        Load a 10-bit big-endian constant to B + rBE1/0.
+        This function MUST BE JMP-ed to since it POPs Z at the end.
+        As a consequence, Z (or two other regs) must be PUSHed prior
+        to the invocation.  Restores RAMPZ.
+
+    __fp64_powser      // fp64_powserx.S
+        Gets the table address in XH.XL and restores RAMPZ.
+
+    Some CHECK_POWSER functions are also reading from flash and restore RAMPZ.
+    In any case, RAMPZ is initialized by the caller as needed.
+*/
+
+.macro LPMX reg, zz
+#if defined (__AVR_HAVE_ELPMX__)
+    elpm \reg, \zz
+#elif defined (__AVR_HAVE_ELPM__)
+    .error ".require_lpmx"
+#elif defined (__AVR_HAVE_LPMX__)
+    lpm \reg, \zz
+#else
+    .error ".require_lpmx"
+#endif
+.endm
+
+;;; On EBI devices, RAMPZ has to be restored to 0 after, since it is
+;;; also used by LD/ST.  On devices without EBI, there is on need to
+;;; restore RAMPZ since the next elpm access will set it as needed.
+#if defined(__AVR_HAVE_RAMPD__) && defined(RAMPZ)
+#define MUST_RESTORE_RAMPZ
+#endif
+
+;;; Load the byte address of TAB to REG, and init RAMPZ as needed.
+.macro LPMX_INIT reg, tab
+    REGNO .regno, \reg
+#ifdef RAMPZ
+    ldi .regno, hh8 (\tab)
+    out RAMPZ_IO_ADDR, .regno
+#endif
+    ldi .regno+0, lo8 (\tab)
+    ldi .regno+1, hi8 (\tab)
+.endm
+
+.macro LPMX_FINI reg
+#ifdef MUST_RESTORE_RAMPZ
+    .ifb \reg
+        ;; No reg provided: Cook one up.
+        push    r31
+        ldi     r31, 0
+        out     RAMPZ_IO_ADDR, r31
+        pop     r31
+    .else
+        ;; REG provided.
+        REGNO .regno, \reg
+        .if .regno >= 16
+            ;; Upper reg: Zero without disturbing SREG.
+            ldi .regno, 0
+        .elseif .regno == 1
+            ;; Assume zero_reg is intact.
+        .else
+            .error "LPMX_FINI regno??"
+        .endif
+        out RAMPZ_IO_ADDR, .regno
+    .endif
+#endif
+.endm
+
 /* alias to be compatible with AVR programming manual */
 #define byte3(x)	hh8(x)
 

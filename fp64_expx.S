@@ -35,9 +35,9 @@
  */
 
 #define	X2BIG		0x0408
-							; start of biggest argument
-							; ((float64_t)0x40862E42FEFA39EFLLU), //709.78271289338397 res
-							; exp(x) --> ((float64_t)0x7FEFFFFFFFFFFFFFLLU), //1.7976931348623E+308 x
+	; start of biggest argument
+	; ((float64_t)0x40862E42FEFA39EFLLU), //709.78271289338397 res
+	; exp(x) --> ((float64_t)0x7FEFFFFFFFFFFFFFLLU), //1.7976931348623E+308 x
 
 FUNCTION fp64_exp
 
@@ -112,19 +112,8 @@ ENTRY_DOUBLE exp expl
 
 	push YL
 	push YH
-#ifdef ARDUINO_AVR_MEGA2560
-	in XL, RAMPZ
-	push XL
-	ldi XL, byte3(.L_expxTable)
-	out  RAMPZ, XL
-#endif
-	ldi XL, lo8(.L_expxTable)
-	ldi XH, hi8(.L_expxTable)
+	LPMX_INIT XL, .L_expxTable
 	XCALL	_U(__fp64_powser)
-#ifdef ARDUINO_AVR_MEGA2560
-	pop YL
-	out RAMPZ, YL
-#endif
 	pop YH
 	pop YL
 	pop rBE1				; load n into B
@@ -211,14 +200,7 @@ ENTRY __fp64_check_powserexp
 #else
 	push XL
 	push XH
-#ifdef ARDUINO_AVR_MEGA2560
-	in XL, RAMPZ
-	push XL
-	ldi XL, byte3(.L_expxTable)
-	out  RAMPZ, XL
-#endif
-	ldi XL, lo8(.L_expxTable)
-	ldi XH, hi8(.L_expxTable)
+	LPMX_INIT XL, .L_expxTable
 	XJMP _U(__fp64_check_powsern)
 #endif /*CHECK_POWSER */
 ENDFUNC

@@ -483,4 +483,4 @@ ENTRY   __fp64_mulsd3_pse0			; post split entry for Z flag already set
 	ror rR6
 	ror rR5
 	ret
-	ENDFUNC
+ENDFUNC

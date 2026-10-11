@@ -42,21 +42,13 @@ FUNCTION __fp64_ldb_log2
 ENTRY __fp64_ldb_log2
 	push ZL
 	push ZH
-#ifdef ARDUINO_AVR_MEGA2560
-	in ZL, RAMPZ
-	push ZL
-	ldi zl, byte3(.L_const_1)
-	out  RAMPZ, ZL
-#endif
-
-	ldi ZL, lo8(.L_const_1)
-	ldi ZH, hi8(.L_const_1)
+    LPMX_INIT ZL, .L_const_ln2
 	XJMP _U(__fp64_ldb_const)
 ENDFUNC
 
 	PGMX_SECTION(fp64lib.ldb_log2)
 
-OBJECT .L_const_1
+OBJECT .L_const_ln2
 	; log(2) with 56 bits precision in unpacked format
 	.byte  0x00, 0xB1, 0x72, 0x17, 0xF7, 0xD1, 0xCF, 0x7A, 0x03, 0xfe	; log(2) = 0.69314718055994531
-ENDOBJ .L_const_1
+ENDOBJ .L_const_ln2

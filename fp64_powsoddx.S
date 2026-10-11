@@ -41,9 +41,9 @@
  Input:
      rA7.rA6.rA5.rA4.rA3.rA2.rA1.rA0,rAE1.rAE0	- an 'x' arg as float64_t_intern
 												  rA7 must contain sign of A
-     XH.XL										- table address (in low 64K flash memory)
+     [RAMPZ].XH.XL								- table address
    Output:
-     rA7.rA6.rA5.rA4.rA3.rA2.rA1.rA0, rAE1.rAE0	- result, rA7 will contain sign of result
+     rA7.rA6.rA5.rA4.rA3.rA2.rA1.rA0, rAE1.rAE0	- result, rA7 contains sign
 
    Notes:
      * As __fp64_powsodd() is one of base function, square() is't used.
@@ -86,6 +86,7 @@ ENTRY __fp64_powsodd
 
 #ifdef CHECK_POWSER
 .L_nf:
+    LPMX_FINI
 	brne	.L_nan			; +/-Inf? No --> return NaN
 .L_inf:
 	XJMP	_U(__fp64_inf)	; No, case 2 --> return Inf
@@ -99,12 +100,7 @@ ENTRY __fp64_check_powsodd3
 #else
 	push XL
 	push XH
-#ifdef ARDUINO_AVR_MEGA2560
-	ldi XL, byte3(.L__testTable3x)
-	out  RAMPZ, XL
-#endif
-	ldi XL, lo8(.L__testTable3x)
-	ldi XH, hi8(.L__testTable3x)
+	LPMX_INIT XL, .L__testTable3x
 
 ENTRY __fp64_check_powsoddn
 98:
@@ -130,12 +126,7 @@ ENTRY __fp64_check_powsoddn
 ENTRY __fp64_check_powslog
 	push XL
 	push XH
-#ifdef ARDUINO_AVR_MEGA2560
-	ldi XL, byte3(.L__testTable3x)
-	out  RAMPZ, XL
-#endif
-	ldi XL, lo8(.L__testTableLogx)
-	ldi XH, hi8(.L__testTableLogx)
+	LPMX_INIT XL, .L__testTableLogx
 	rjmp 98b
 
 #endif /* CHECK_POWSER */

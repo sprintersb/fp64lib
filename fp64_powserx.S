@@ -46,13 +46,11 @@
    Input:
      rA7.rA6.rA5.rA4.rA3.rA2.rA1.rA0,rAE1.rAE0	- an 'x' arg as float64_t_intern
 												  rA7 must contain sign of A
-     XH.XL										- table address
-		 RAMPZ										- segment of table (for CPUs with >64k flash memory)
+     [RAMPZ].XH.XL								- table address
    Output:
      rA7.rA6.rA5.rA4.rA3.rA2.rA1.rA0, rAE1.rAE0	- result, rA7 will contain sign of result
-		 RAMPZ										- preserved from input
-
- */
+	 RAMPZ										- preserved from input
+*/
 
 #define	rcntr	r0
 
@@ -61,37 +59,17 @@ ENTRY __fp64_powser
 	XCALL _U(__fp64_movCA)		; save x
 	X_movw  YL, rAE0
 
-#ifdef ARDUINO_AVR_MEGA2560
-	push ZL						; Z is in use by A
-	push ZH
-	in ZL, RAMPZ
-	push ZL
-
-	movw ZL, XL
-	elpm	rcntr, Z+				; load polynom power (3 in our example)
-	in r1, RAMPZ
-	sts .L_saveZ, ZL			; save pointer to table
-	sts .L_saveZ+1, ZH
-	sts .L_saveZ+2, r1
-	clr r1
-
-	pop ZL
-	out RAMPZ, ZL
-	pop ZH
-	pop ZL
-#else
 	push ZL						; Z is in use by A
 	push ZH
 
-	movw ZL, XL
-	lpm	rcntr, Z+				; load polynom power (3 in our example)
+	X_movw ZL, XL
+	LPMX	rcntr, Z+			; load polynom power (3 in our example)
 	sts .L_saveZ, ZL			; save pointer to table
 	sts .L_saveZ+1, ZH
 
 	; rcall __fp64_saveABC
 	pop ZH
 	pop ZL
-#endif
 
 	rcall	.Load10				; load first factor into B (in our example C3)
 
@@ -110,107 +88,75 @@ ENTRY __fp64_powser
 
 	; rcall __fp64_saveABC
 
-	push rR5	; save working registers
+	push rR5	                ; save working registers
 	push rR6
 	push rR7
 	push rR8
 	push rZero
-	XCALL	_U(__fp64_mulsd3_pse)	; create x*Cn (1st run: x*C3, 2nd: (x*C3+C2)*x, 3rd: ((x*C3+C2)*x+C1)*x )
+    ;; create x*Cn (1st run: x*C3, 2nd: (x*C3+C2)*x, 3rd: ((x*C3+C2)*x+C1)*x )
+	XCALL	_U(__fp64_mulsd3_pse)
 	pop rZero
-	pop rR8				; restore used registers and return
+	pop rR8				        ; restore used registers and return
 	pop rR7
 	pop rR6
 	pop rR5
 
 	bld rA7, 7					; save sign of result
-	brcs .L_ret					; C is set on overflow and result is already packed
+	brcs .L_ret					; C is set on overflow; result is already packed
 
 	rcall .Load10
-	mov r0, rB7					; set sign for operation A+B or A-B = sign(A)^sign(B)
+	mov r0, rB7					; set sign for A+B or A-B = sign(A)^sign(B)
 	eor r0, rA7
 	bst r0,7
 
-	XCALL	_U(__fp64_add_pse)	; create x*Cn + Cn-1 (1st run: x*C3 + C2, 2nd: (x*C3+C2)*x + C1, 3rd: ((x*C3+C2)*x+C1)*x + C0 )
+    ;; create x*Cn + Cn-1 (1st run: x*C3 + C2, 2nd: (x*C3+C2)*x + C1,
+    ;; 3rd: ((x*C3+C2)*x+C1)*x + C0 )
+	XCALL	_U(__fp64_add_pse)
 	bld rA7, 7					; save sign bit
 
 	pop rcntr					; retrieve counter
-	brcs .L_ret					; C is set on overflow and result is already packed
+	brcs .L_ret					; C is set on overflow; result is already packed
 
 	dec	rcntr					; 1st Run: 3-->2, 2nd: 2-->1, 3rd 1-->0 = stop
 	brne	.Loop				; repeat until all constants processed
 
 .L_ret:
+    LPMX_FINI r1
 	ret
 
 	; load an unpacked 10 byte number from program memory
-	; location will be retrieved from .L_saveZ, .L_saveZ+1 (and .L_saveZ+2 for ATMEGA2560)
-	; preservers RAMPZ
+	; location will be retrieved from .L_saveZ and .L_saveZ+1.
+	; keeps RAMPZ
 .Load10:
 
-#ifdef ARDUINO_AVR_MEGA2560
-	push ZL
-	push ZH
-	in ZL, RAMPZ
-	push ZL
-
-	lds ZL, .L_saveZ+2
-	out  RAMPZ, ZL
-	lds ZL, .L_saveZ			; load table pointer
-	lds ZH, .L_saveZ+1
-
-	elpm	rB7, Z+				; load next constant from program memory
-	elpm	rB6, Z+
-	elpm	rB5, Z+
-	elpm	rB4, Z+
-	elpm	rB3, Z+
-	elpm	rB2, Z+
-	elpm	rB1, Z+
-	elpm	rB0, Z+
-	elpm	rBE1, Z+
-	elpm	rBE0, Z+
-
-	sts .L_saveZ, ZL			; save table pointer, now pointing to the next constant
-	sts .L_saveZ+1, ZH
-	in ZL, RAMPZ
-	sts .L_saveZ+2, ZL
-
-	pop ZL
-	out RAMPZ, ZL
-	pop ZH
-	pop ZL
-#else
 	push ZL
 	push ZH
 
 	lds ZL, .L_saveZ			; load table pointer
 	lds ZH, .L_saveZ+1
 
-	lpm	rB7, Z+				; load next constant from program memory
-	lpm	rB6, Z+
-	lpm	rB5, Z+
-	lpm	rB4, Z+
-	lpm	rB3, Z+
-	lpm	rB2, Z+
-	lpm	rB1, Z+
-	lpm	rB0, Z+
-	lpm	rBE1, Z+
-	lpm	rBE0, Z+
+	LPMX	rB7, Z+				; load next constant from program memory
+	LPMX	rB6, Z+
+	LPMX	rB5, Z+
+	LPMX	rB4, Z+
+	LPMX	rB3, Z+
+	LPMX	rB2, Z+
+	LPMX	rB1, Z+
+	LPMX	rB0, Z+
+	LPMX	rBE1, Z+
+	LPMX	rBE0, Z+
 
-	sts .L_saveZ, ZL			; save table pointer, now pointing to the next constant
+	sts .L_saveZ, ZL		; save Z, now pointing to the next constant
 	sts .L_saveZ+1, ZH
 
 	pop ZH
 	pop ZL
-#endif
 
 	ret
 
 #ifdef CHECK_POWSER
 .L_nf:
-#ifdef ARDUINO_AVR_MEGA2560
-	pop r0
-	out  RAMPZ, r0	; restore RAMPZ
-#endif
+    LPMX_FINI XH
 	pop XH
 	pop XL
 
@@ -227,14 +173,7 @@ ENTRY __fp64_check_powser3
 #else
 	push XL
 	push XH
-#ifdef ARDUINO_AVR_MEGA2560
-	in XL, RAMPZ
-	push XL
-	ldi XL, byte3(__testTablex3)
-	out  RAMPZ, XL
-#endif
-	ldi XL, lo8(__testTablex3)
-	ldi XH, hi8(__testTablex3)
+	LPMX_INIT XL, __testTablex3
 
 ENTRY __fp64_check_powsern
 98:
@@ -244,7 +183,7 @@ ENTRY __fp64_check_powsern
 	XCALL _U(__fp64_pushCB) ; preserve register set
 	push YL
 	push YH
-  XCALL _U(__fp64_powser)
+    XCALL _U(__fp64_powser)
 
 	; rcall __fp64_saveABC
 
@@ -252,10 +191,7 @@ ENTRY __fp64_check_powsern
 	pop YL
 	XCALL _U(__fp64_popBC)	; restore register set
 
-#ifdef ARDUINO_AVR_MEGA2560
-	pop r0
-	out  RAMPZ, r0	; restore RAMPZ
-#endif
+    LPMX_FINI XL
 	pop XH
 	pop XL
 	brcs 99f
@@ -270,14 +206,7 @@ ENTRY __fp64_check_powser2
 #else
 	push XL
 	push XH
-#ifdef ARDUINO_AVR_MEGA2560
-	in XL, RAMPZ
-	push XL
-	ldi XL, byte3(__testTablex2)
-	out  RAMPZ, XL
-#endif
-	ldi XL, lo8(__testTablex2)
-	ldi XH, hi8(__testTablex2)
+	LPMX_INIT XL, __testTablex2
 	rjmp 98b
 #endif /* CHECK_POWSER */
 
@@ -287,14 +216,7 @@ ENTRY __fp64_check_powser1
 #else
 	push XL
 	push XH
-#ifdef ARDUINO_AVR_MEGA2560
-	in XL, RAMPZ
-	push XL
-	ldi XL, byte3(__testTablex1)
-	out  RAMPZ, XL
-#endif
-	ldi XL, lo8(__testTablex1)
-	ldi XH, hi8(__testTablex1)
+	LPMX_INIT XL, __testTablex1
 	rjmp 98b
 
 #endif /* CHECK_POWSER */
@@ -328,10 +250,6 @@ ENDOBJ __testTablex1
 
 #endif /* CHECK_POWSER */
 
-.data
+.bss
 ENTRY __fp64_saveZ
-#ifdef ARDUINO_AVR_MEGA2560
-.L_saveZ:	.skip 3			; scratch area to save pointer to table
-#else
 .L_saveZ:	.skip 2			; scratch area to save pointer to table
-#endif
