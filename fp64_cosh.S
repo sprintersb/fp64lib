@@ -71,5 +71,5 @@ ENTRY_DOUBLE cosh coshl
 
 	XJMP _U(__fp64_popBret)		; restore registers and return
 ENDFUNC
-.data
+.bss
 .L_sign:	.skip 1				; storage for saving sign

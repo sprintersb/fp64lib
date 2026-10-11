@@ -401,5 +401,5 @@ ENTRY fp64_etoa
 
 ENDFUNC
 
-.data
+.bss
 .L_exp10:	.space 2	; save exponent in base 10 here

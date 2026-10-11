@@ -136,6 +136,7 @@ ENTRY   __fp64_popBret
 	ret
 ENDFUNC
 
-.data
-ENTRY __fp64_saver01
+.bss
+OBJECT .global __fp64_saver01
 	.skip 3
+ENDOBJ __fp64_saver01

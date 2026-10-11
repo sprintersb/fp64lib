@@ -251,5 +251,6 @@ ENDOBJ __testTablex1
 #endif /* CHECK_POWSER */
 
 .bss
-ENTRY __fp64_saveZ
-.L_saveZ:	.skip 2			; scratch area to save pointer to table
+OBJECT .global __fp64_saveZ
+OBJECT .L_saveZ
+	.skip 2			; scratch area to save pointer to table

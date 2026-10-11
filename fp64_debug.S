@@ -277,7 +277,7 @@ ENTRY __fp64_proxy2_int8
 	XJMP _U(__fp64_popBret)
 ENDFUNC
 
-.data
+.bss
 __a_sreg:	.skip	1
 __a_count:	.skip	1
 __a_sign:	.skip	1
@@ -302,11 +302,12 @@ __c_m:		.skip	7
 __c7:		.skip	1
 __cr1:		.skip	1
 __y:		.skip	2
-ENTRY __before
+OBJECT __before
 			.skip	32
-ENTRY __after
+OBJECT __after
 			.skip	32
-__function:	.skip	2
+OBJECT __function
+			.skip	2
 #ifdef CHECK_BIGMEM
 			.skip 0x280
 #endif
