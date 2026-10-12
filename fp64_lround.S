@@ -1,4 +1,5 @@
 /* Copyright (c) 2019-2020  Uwe Bissinger
+   Copyright (c) 2026  Georg-Johann Lay
    Based on 32bit floating point arithmetic routines which is:
    Copyright (c) 2007  Dmitry Xmelkov
 

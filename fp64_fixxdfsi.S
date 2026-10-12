@@ -1,4 +1,5 @@
 /* Copyright (c) 2019-2020  Uwe Bissinger
+   Copyright (c) 2026  Georg-Johann Lay
    Partly based on 32bit floating point arithmetic routines which are:
    Copyright (c) 2002  Michael Stumpf  <mistumpf@de.pepperl-fuchs.com>
    Copyright (c) 2007  Dmitry Xmelkov

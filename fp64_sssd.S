@@ -1,4 +1,5 @@
 /* Copyright (c) 2020-2025  Uwe Bissinger
+   Copyright (c) 2026  Georg-Johann Lay
    All rights reserved.
 
    Redistribution and use in source and binary forms, with or without
