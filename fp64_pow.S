@@ -106,8 +106,8 @@ ENTRY_DOUBLE pow powl
 	brpl .L_pow					; yes, compute x^y via exp(log(x)*y)
 
     ; x < 0, now check if y is an odd/even integer
-    ; if x is an odd integer, then pow(x,y) = -pow(abs(x),y)
-    ; if x is an even integer, then pow(x,y) = pow(abs(x),y)
+    ; if y is an odd integer, then pow(x,y) = -pow(abs(x),y)
+    ; if y is an even integer, then pow(x,y) = pow(abs(x),y)
     ; for y to be an integer, it has to be in the range of 1 <= y < 2^52
     tst rB7
 	brmi .L_nan					; y < 0 --> x^y result undefined
