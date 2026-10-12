@@ -70,6 +70,7 @@ fp64lib_a_asm_sources = \
 	fp64_pscA.S \
 	fp64_pscB.S \
 	fp64_round.S \
+	fp64_scalbln.S \
 	fp64_sd.S \
 	fp64_shift.S \
 	fp64_sidf.S \
