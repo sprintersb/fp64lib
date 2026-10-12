@@ -177,7 +177,7 @@ ENTRY fp64_etoa
 	sub rMod, rAE0
 
 1:	; rMod contains "exponent mod 3"
-	rcall __fp64_saveAB
+	;rcall __fp64_saveAB
 	tst rMod
 	brne 10f
 

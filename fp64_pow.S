@@ -78,7 +78,7 @@ ENTRY_DOUBLE pow powl
 
 	; preliminary check for significand of A == 0
 	ldi	ZL, 0x3f
-	XCALL __fp64_saveAB
+	;XCALL __fp64_saveAB
 
 	XCALL _U(__fp64_cpc0A5)
 	brne 0f						; skip a bit of comparisons
