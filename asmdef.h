@@ -169,9 +169,6 @@
 #endif
 .endm
 
-/* alias to be compatible with AVR programming manual */
-#define byte3(x)	hh8(x)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Chicken out when the code demands more than the hardware can do.
 
