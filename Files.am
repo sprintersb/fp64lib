@@ -13,7 +13,7 @@ fp64lib_a_asm_sources = \
 	fp64_cmp_1.S \
 	fp64_cmpA.S \
 	fp64_cmp.S \
-	fp64_cmpsd2.S \
+	fp64_cmpdf2.S \
 	fp64_copysign.S \
 	fp64_cosh.S \
 	fp64_cotan.S \
@@ -21,6 +21,7 @@ fp64lib_a_asm_sources = \
 	fp64_disd.S \
 	fp64_divsf3x.S \
 	fp64_ds.S \
+	fp64_eqdf2.S \
 	fp64_expx.S \
 	fp64_exp10.S \
 	fp64_fdim.S \
@@ -32,7 +33,8 @@ fp64lib_a_asm_sources = \
 	fp64_fmodx.S \
 	fp64_frexp.S \
 	fp64_fsplit3.S \
-	fp64_gesd2.S \
+	fp64_gedf2.S \
+	fp64_gtdf2.S \
 	fp64_getexp10.S \
 	fp64_hypot.S \
 	fp64_inf.S \
@@ -45,6 +47,8 @@ fp64lib_a_asm_sources = \
 	fp64_ldb_log2.S \
 	fp64_ldb_pi2.S \
 	fp64_ldexp.S \
+	fp64_ledf2.S \
+	fp64_ltdf2.S \
 	fp64_log10.S \
 	fp64_log2.S \
 	fp64_logx.S \
@@ -60,6 +64,7 @@ fp64lib_a_asm_sources = \
 	fp64_mul64AB.S \
 	fp64_mulsd3x.S \
 	fp64_nan.S \
+	fp64_nedf2.S \
 	fp64_negdf2.S \
 	fp64_norm2.S \
 	fp64_pi2.S \

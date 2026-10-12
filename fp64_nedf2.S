@@ -32,34 +32,24 @@
 #include "fp64def.h"
 #include "asmdef.h"
 
-FUNCTION fp64_compare
-/* float64_t fp64_compare (float64_t A, float64_t B);
-    Compares the two values A and B and returns -1/0/1,
-	based on the following rules:
-	 case|	A	 |	B	 |	fp64_compare(A,B)
-	-----+-------+-------+--------------------
-	 1	 |	NaN	 |	any	 |	1
-	 2	 |	any	 |	NaN	 |	1
-	 3	 | A < B |	any  |	-1
-	 4	 | A == B|	any	 |	0
-	 5	 | A > B |	any  |	1
- */
-/* GCC expects all these functions to return -1/0/1 as for __cmpsf2 -
-   compare with gcc/config/fp-bit.c (the only difference is with NaNs
-   where we should always return nonzero for EQ/NE, -1 for GT/GE,
-   1 for LT/LE).  -MM 2000-11-18 */
+#define ret_lo	r24	/* return value (signed byte)	*/
+.ifnc	ret_lo, rA6	; This is used in __fp64_cmp() function.
+  .err
+.endif
 
-ENTRY fp64_compare
-ENTRY   __fp64_cmpsd2
-GCC_ENTRY  __eqdf2
+#ifdef DOUBLE_COMPARE_BOOL
+FUNCTION __nedf2
 GCC_ENTRY  __nedf2
-GCC_ENTRY  __ltdf2
-GCC_ENTRY  __ledf2
     XCALL _U(__fp64_pushB)
-	XCALL	_U(__fp64_cmp)
+    XCALL _U(__fp64_cmp)
     XCALL _U(__fp64_popB)
-	brcc	1f
-	ldi		r24, 1
-1:	ret
-
+    brcs    0f                  ; NaN?
+    ;; return ret_lo != 0
+    tst     ret_lo
+    brne 1f
+0:  clr     ret_lo
+    ret
+1:  ldi     ret_lo, 1
+    ret
 ENDFUNC
+#endif

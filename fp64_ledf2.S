@@ -1,5 +1,5 @@
 /* Copyright (c) 2019-2020  Uwe Bissinger
-   Based on 32bit floating point arithmetic routines which are:
+   Based on 32bit floating point arithmetic routines which is:
    Copyright (c) 2002  Michael Stumpf  <mistumpf@de.pepperl-fuchs.com>
    Copyright (c) 2008  Dmitry Xmelkov
    All rights reserved.
@@ -32,32 +32,24 @@
 #include "fp64def.h"
 #include "asmdef.h"
 
-/* GCC expects all these functions to return -1/0/1 as for __cmpsf2 -
-   compare with gcc/config/fp-bit.c (the only difference is with NaNs
-   where we should always return nonzero for EQ/NE, -1 for GT/GE,
-   1 for LT/LE).  -MM 2000-11-18 */
-
-#define	ret_lo	r24	/* return value (signed byte)	*/
+#define ret_lo	r24	/* return value (signed byte)	*/
 .ifnc	ret_lo, rA6	; This is used in __fp64_cmp() function.
   .err
 .endif
 
-/* Return value (ret_lo):
-     if (A > B)
-        1
-     elif (A == B)
-        0
-     else // A < B || isnan(A) || isnan(B)
-        -1
- */
-FUNCTION __fp64_gesd2
-GCC_ENTRY __gedf2
-GCC_ENTRY __gtdf2
+#ifdef DOUBLE_COMPARE_BOOL
+FUNCTION __ledf2
+GCC_ENTRY  __ledf2
     XCALL _U(__fp64_pushB)
-	XCALL	_U(__fp64_cmp)
+    XCALL _U(__fp64_cmp)
     XCALL _U(__fp64_popB)
-	brcc	1f
-	ldi	ret_lo, -1
-1:	ret
-
+    brcs    0f                  ; NaN?
+    ;; return ret_lo <= 0  /  0 >= ret_lo
+    cp      r1, ret_lo
+    brge 1f
+0:  clr     ret_lo
+    ret
+1:  ldi     ret_lo, 1
+    ret
 ENDFUNC
+#endif
