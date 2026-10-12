@@ -32,14 +32,14 @@
 #include "fp64def.h"
 #include "asmdef.h"
 
-/*  __fp64_one() returns 1.0
+/*  __fp64_one() returns 1.0       T is unchanged
 	__fp64_zero() returns 0.0
 	__fp64_szero() returns +/-0.0, based on sign bit in T register.
  */
 
 FUNCTION __fp64_zero
 ENTRY __fp64_one
-	XCALL _U(__fp64_zero)
+	XCALL _U(__fp64_szero)
 	ldi rA7, 0x3f
 	ldi rA6, 0xf0
 	ret
