@@ -170,25 +170,25 @@ float64_t fp64_modf (float64_t x, float64_t *iptr);
 float64_t fp64_fma (float64_t A, float64_t B, float64_t C) __ATTR_CONST__;
 
 // conversion functions
-float64_t fp64_int64_to_float64( long long x ) __ATTR_CONST__;	// (signed) long long to float64_t
-float64_t fp64_int32_to_float64( long x) __ATTR_CONST__;		// (signed) long to float64_t
-float64_t fp64_long_to_float64( long x ) __ATTR_CONST__;		// alias to fp64_int32_to_float64
+float64_t fp64_int64_to_float64( int64_t x ) __ATTR_CONST__;	// (signed) long long to float64_t
+float64_t fp64_int32_to_float64( int32_t x) __ATTR_CONST__;		// (signed) long to float64_t
+float64_t fp64_long_to_float64( int32_t x ) __ATTR_CONST__;		// alias to fp64_int32_to_float64
 float64_t fp64_uint16_to_float64( uint16_t x ) __ATTR_CONST__;	// unsigned short to float64_t
 float64_t fp64_int16_to_float64( int16_t x) __ATTR_CONST__;		// (signed) short to float64_t
 
-float64_t fp64_uint64_to_float64( unsigned long long x ) __ATTR_CONST__;// unsigned long long to float64_t
-float64_t fp64_uint32_to_float64( unsigned long x ) __ATTR_CONST__;		// unsigned long to float64_t
+float64_t fp64_uint64_to_float64( uint64_t x ) __ATTR_CONST__;// unsigned long long to float64_t
+float64_t fp64_uint32_to_float64( uint32_t x ) __ATTR_CONST__;		// unsigned long to float64_t
 
-long long fp64_to_int64( float64_t A) __ATTR_CONST__;			// float_t to int64_t
-long 	  fp64_to_int32( float64_t A) __ATTR_CONST__;			// float_t to int32_t
-int 	  fp64_to_int16( float64_t A) __ATTR_CONST__;			// float_t to int16_t
-char 	  fp64_to_int8( float64_t A) __ATTR_CONST__;			// float_t to int8_t
-long 	  fp64_float64_to_long( float64_t A) __ATTR_CONST__;	// alias to fp64_to_int32
+int64_t fp64_to_int64( float64_t A) __ATTR_CONST__;			// float_t to int64_t
+int32_t fp64_to_int32( float64_t A) __ATTR_CONST__;			// float_t to int32_t
+int16_t fp64_to_int16( float64_t A) __ATTR_CONST__;			// float_t to int16_t
+int8_t  fp64_to_int8( float64_t A) __ATTR_CONST__;			// float_t to int8_t
+int32_t fp64_float64_to_long( float64_t A) __ATTR_CONST__;	// alias to fp64_to_int32
 
-unsigned long long fp64_to_uint64( float64_t A) __ATTR_CONST__;	// float_t to uint64_t
-unsigned long 	   fp64_to_uint32( float64_t A) __ATTR_CONST__;	// float_t to uint32_t
-unsigned int 	   fp64_to_uint16( float64_t A) __ATTR_CONST__;	// float_t to uint16_t
-unsigned char 	   fp64_to_uint8( float64_t A) __ATTR_CONST__; 	// float_t to uint8_t
+uint64_t fp64_to_uint64( float64_t A) __ATTR_CONST__;	// float_t to uint64_t
+uint32_t fp64_to_uint32( float64_t A) __ATTR_CONST__;	// float_t to uint32_t
+uint16_t fp64_to_uint16( float64_t A) __ATTR_CONST__;	// float_t to uint16_t
+uint8_t  fp64_to_uint8( float64_t A) __ATTR_CONST__; 	// float_t to uint8_t
 
 float64_t fp64_sd( float x ) __ATTR_CONST__;					// float to float64_t
 float fp64_ds( float64_t x ) __ATTR_CONST__;					// float64_t to float
