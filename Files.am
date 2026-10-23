@@ -121,7 +121,6 @@ fp64lib_a_asm_sources = \
 fp64lib_h = fp64def.h fp64lib.h Double.h
 
 fp64lib_a_extra_dist = \
-	asmdef.h \
 	fp64asm.h \
 	$(fp64lib_h) \
 	README.md
