@@ -1,0 +1,127 @@
+# Files.am is also included by include/avr/fp64lib/Makefile.am
+
+fp64lib_a_c_sources =
+
+# List all files since SUBST_BASENAME_FILES is not allowed in _SOURCES.
+# sed 's:^\(.*\):\t\1 \\:;${s:[ \t]*\\$::}' <<< $(ls fp64*.S)
+fp64lib_a_asm_sources = \
+	fp64_10pown.S \
+	fp64_abs.S \
+	fp64_acosh.S \
+	fp64_adddf3x.S \
+	fp64_addsubAB.S \
+	fp64_asinx.S \
+	fp64_atan2.S \
+	fp64_atanh.S \
+	fp64_atanx.S \
+	fp64_cbrt.S \
+	fp64_ceil.S \
+	fp64_class.S \
+	fp64_classify.S \
+	fp64_cmp.S \
+	fp64_cmpA.S \
+	fp64_cmp_1.S \
+	fp64_cmpdf2.S \
+	fp64_cmpdf2_gegt.S \
+	fp64_copysign.S \
+	fp64_cosh.S \
+	fp64_cotan.S \
+	fp64_debug.S \
+	fp64_didf.S \
+	fp64_divdf3x.S \
+	fp64_ds.S \
+	fp64_eqdf2.S \
+	fp64_etoa.S \
+	fp64_exp10.S \
+	fp64_exp2.S \
+	fp64_expx.S \
+	fp64_fdim.S \
+	fp64_fixxdfsi.S \
+	fp64_floor.S \
+	fp64_fma.S \
+	fp64_fmax.S \
+	fp64_fmod.S \
+	fp64_fmodx.S \
+	fp64_frexp.S \
+	fp64_fsplit3.S \
+	fp64_ftoa1.S \
+	fp64_gedf2.S \
+	fp64_getexp10.S \
+	fp64_gtdf2.S \
+	fp64_hypot.S \
+	fp64_ilogb.S \
+	fp64_inf.S \
+	fp64_inverse.S \
+	fp64_isBzero.S \
+	fp64_isNormal.S \
+	fp64_isSignMinus.S \
+	fp64_isZero.S \
+	fp64_isfinite.S \
+	fp64_isinf.S \
+	fp64_isnan.S \
+	fp64_ldb_1.S \
+	fp64_ldb_log2.S \
+	fp64_ldb_pi2.S \
+	fp64_ldexp.S \
+	fp64_ledf2.S \
+	fp64_log10.S \
+	fp64_log2.S \
+	fp64_logx.S \
+	fp64_lrint.S \
+	fp64_lround.S \
+	fp64_lshift64.S \
+	fp64_ltdf2.S \
+	fp64_min.S \
+	fp64_minMag.S \
+	fp64_minNumMag.S \
+	fp64_minNumber.S \
+	fp64_modf.S \
+	fp64_movAB.S \
+	fp64_movAC.S \
+	fp64_movBA.S \
+	fp64_movBC.S \
+	fp64_movCA.S \
+	fp64_mul64AB.S \
+	fp64_muldf3x.S \
+	fp64_nan.S \
+	fp64_nedf2.S \
+	fp64_negdf2.S \
+	fp64_nextUp.S \
+	fp64_norm2.S \
+	fp64_pi2.S \
+	fp64_pow.S \
+	fp64_powserx.S \
+	fp64_powsoddx.S \
+	fp64_pretA.S \
+	fp64_pscA.S \
+	fp64_pscB.S \
+	fp64_round.S \
+	fp64_scalbln.S \
+	fp64_sd.S \
+	fp64_shift.S \
+	fp64_sidf.S \
+	fp64_signbit.S \
+	fp64_sinx.S \
+	fp64_sqrt.S \
+	fp64_square.S \
+	fp64_sssd.S \
+	fp64_stackA.S \
+	fp64_stackB.S \
+	fp64_stackC.S \
+	fp64_strtod.S \
+	fp64_swapAB.S \
+	fp64_tanh.S \
+	fp64_tanx.S \
+	fp64_tostring.S \
+	fp64_totalOrder.S \
+	fp64_trunc.S \
+	fp64_zero.S
+
+# Populated by include/avr/fp64lib/Makefile.am
+fp64lib_h = fp64def.h fp64lib.h Double.h
+
+fp64lib_a_extra_dist = \
+	asmdef.h \
+	fp64asm.h \
+	$(fp64lib_h) \
+	README.md
