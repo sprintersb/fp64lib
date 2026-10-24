@@ -1,3 +1,5 @@
+### Auto-generated from Files.tpl by running Files.sh
+
 # Files.am is also included by include/avr/fp64lib/Makefile.am
 
 fp64lib_a_c_sources =
