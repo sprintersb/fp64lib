@@ -1,0 +1,51 @@
+
+This example shows how to use AVRtest syscalls for IEEE double
+emulation, and how to hook them into fp64lib without changing
+fp64lib sources or he need to re-build libfp64.a.
+
+The default target will build a small example program that wraps
+__fp64_muldf3_pse, and then simulates it with the AVRtest.
+core simulator.
+
+Makefile fromt targets are:
+
+		 all, elf, lst, run, clean, fp64lib, clean-fp64lib
+
+In order to adjust details of the build, set parameters like:
+
+     make ... MCU=atxmega128a1
+
+Recognized parameters are [default]
+
+MCU
+    Set the AVR target device [atmega328]
+
+AVRTEST_HOME
+    Folder where avrtest.h and the avrtest executable are located.
+    Only needed when avrtest is not in the PATH.
+
+CC
+    The AVR compiler [avr-gcc]
+
+CFLAGS
+    Additional compile / link flags.
+
+FP64LIB_HOME
+    Where fp64lib is located [../../..]
+
+WRAPS
+    Assume that wrappers for all the functions in WRAPS are available.
+    This example comes with one wrapper in example-wrap-muldf3_pse.S
+    In orde to observe the example without wrapping, use
+    $ make ... WRAPS=
+
+LOG
+    The default uses avrtest_log for simulation, which supports
+    instruction logging.  To use the faster avrtest that doesn't
+    support logging, use:
+    $ make ... LOG=
+
+exit_c
+    Exit module from AVRtest.  Implements streams like stdout,
+    provides convenient exit() etc.  If you don't want that, use
+    $ make ... exit_c=
