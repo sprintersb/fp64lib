@@ -36,8 +36,12 @@ FP64LIB_HOME
 WRAPS
     Assume that wrappers for all the functions in WRAPS are available.
     This example comes with one wrapper in example-wrap-muldf3_pse.S
-    In orde to observe the example without wrapping, use
+    that wraps __fp64_muldf3_pse.
+    In order to observe the example without wrapping, use
     $ make ... WRAPS=
+    This is useful to show the correct number of cycles, because with
+    the wrap, cycles includes the run times of all the executed c_peek
+    functions.
 
 LOG
     The default uses avrtest_log for simulation, which supports

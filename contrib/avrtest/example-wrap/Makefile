@@ -45,7 +45,8 @@ exit_c = $(AVRTEST_HOME)/dejagnuboards/exit.c
 
 # For additional compile and link flags, build with
 # make ... CFLAGS='<flags>'
-OPTS = -mmcu=$(MCU) -std=gnu99 -fno-strict-aliasing -Os -Wall
+OPTS = -mmcu=$(MCU) -std=gnu99 -fno-strict-aliasing -Wall
+OPTS += -Os -mrelax -ffunction-sections -Wl,--gc-sections
 OPTS += -I$(AVRTEST_HOME) $(exit_c)
 OPTS += -I$(FP64LIB_HOME) -L$(FP64LIB_HOME) -lfp64-$(MCU)
 OPTS += -Wl,-Map=$(@:.elf=.map)
@@ -54,7 +55,7 @@ OPTS += $(CFLAGS)
 .PHONY: all elf lst run help force clean
 .PHONY: example-wrap fp64lib clean-fp64lib
 
-all: run
+all: lst run
 
 help:
 	@cat help.txt

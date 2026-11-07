@@ -71,6 +71,7 @@
    5) Continues with the previous instruction logging state of on/off.  */
 
 .macro MAKE_PEEK fun
+    .section .text.\fun,"ax","progbits"
 \fun:
     .pushall
     XCALL   c_\fun
@@ -83,6 +84,7 @@
 
 ;;; Common tail for all the peek* functions below.
     .type pop_all, "function"
+    .section .text.pop_all,"ax","progbits"
 pop_all:
     .popall
     ret

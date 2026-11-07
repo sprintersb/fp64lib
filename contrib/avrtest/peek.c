@@ -9,6 +9,8 @@ typedef uint64_t L;
 #define NI __attribute__((__noinline__,__noclone__))
 #define UU __attribute__((__unused__))
 
+#define printf(msg, ...)   avrtest_printf_P  (PSTR (msg), ##__VA_ARGS__)
+
 #define ARRAY_SIZE(x) (sizeof (x) / sizeof (*x))
 
 #if	defined(__AVR_TINY__)
@@ -125,7 +127,7 @@ UU static int8_t get_cookie (const peek_t *p)
 
 UU static int8_t show_cookie (const peek_t *p)
 {
-    static const char s_cookie[][6] PROGMEM =
+    static const char s_cookie[][4] PROGMEM =
     {
         "00",
         "add", // 1
@@ -137,10 +139,16 @@ UU static int8_t show_cookie (const peek_t *p)
         "20", "21", "22", "23", "24", "25", "26", "27", "28", "29",
         "30", "31"
     };
+
     int8_t c = get_cookie (p);
+    if (c == 0)
+        printf ("\n");
+    printf ("%" PRIret " ", ret_addr (p));
     if (c >= 0)
-        avrtest_printf_P (PSTR("0x%" PRIret " cookie: %02d.%S \n"),
-                          ret_addr (p), c, s_cookie[c]);
+        printf ("%02d.%-3S ", c, s_cookie[c]);
+    else
+        printf ("       ");
+
     return c;
 }
 
@@ -157,26 +165,25 @@ UU static void show_flags (const peek_t *p)
     if (sreg & FLAG_Z_BIT)  s_sreg[0] = 'Z';
     if (sreg & FLAG_C_BIT)  s_sreg[0] = 'C';
 
-    avrtest_printf_P (PSTR("sreg=0x%02x=%s"), sreg, s_sreg);
+    printf ("sreg=0x%02x=%s", sreg, s_sreg);
 }
 
 UU static void show_d8 (const peek_t *p, uint8_t reg, char id)
 {
     const L *f = (const L*) &p->r[reg];
     const uint64_t *i = (const uint64_t*) &p->r[reg];
-    avrtest_printf_P (PSTR("%c = %.14Da = 0x%016llx = %.16Df\n"),
-                      id, *f, *i, *f);
+    printf ("%c = %.14Da = 0x%016llx = %.16Df\n", id, *f, *i, *f);
 }
 
 UU static void show_d10 (const peek_t *p, uint8_t reg, uint8_t r_expo, char id)
 {
     L d10 = dbl_10 (p, reg, r_expo);
-    avrtest_printf_P (PSTR("%cX = %.15Da\t=% 23.16Df  S=%d  T=%d: (%02x) "),
-                      id, d10, d10, rbit (p, reg+7, 7), flagT(p), p->r[reg+7]);
+    printf ("%cX =% 23.16Df  S=%d  T=%d: (%02x) ",
+            id, d10, rbit (p, reg+7, 7), flagT(p), p->r[reg+7]);
     for (int8_t i = 6; i >= 0; --i)
-        avrtest_printf_P (PSTR("%02x,"), p->r[reg + i]);
+        printf ("%02x,", p->r[reg + i]);
     int16_t expo = *(const int16_t*) & p->r[r_expo];
-    avrtest_printf_P (PSTR(" %04x=1023%+d\n"), expo, expo - 1023);
+    printf (" %04x=1023%+d\n", expo, expo - 1023);
 }
 
 void c_peeka (const peek_t *p)
@@ -211,6 +218,6 @@ void c_peekbx (const peek_t *p)
 
 void c_peekx (const peek_t *p)
 {
-    avrtest_printf ("rA7 = %d, X = %d\n",
-                    (int8_t) p->r[25], *(const int*) & p->r[26]);
+    printf ("rA7 = %d, X = %d\n",
+            (int8_t) p->r[25], *(const int*) & p->r[26]);
 }
