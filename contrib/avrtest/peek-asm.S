@@ -19,10 +19,11 @@
         push .reg
     .endr
 
-    clr     __zero_reg__                    ; GCC ABI
-
     ;; Store SREG, RAMPZ.
     in      __tmp_reg__, SREG_IO_ADDR   $  push    __tmp_reg__
+
+    clr     __zero_reg__                    ; GCC ABI
+
 #ifdef RAMPZ
     in      __tmp_reg__, RAMPZ_IO_ADDR  $  push    __tmp_reg__
     out     RAMPZ_IO_ADDR, __zero_reg__
