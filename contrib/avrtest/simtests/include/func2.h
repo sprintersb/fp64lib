@@ -8,8 +8,8 @@ UU NI static void atest2 (L x, L y)
     if (! same (z1, z2))
     {
         printf ("\n%s (%+.16De, %+.16De)\n", S_FUN, x, y);
-        printf ("result: %+.16De = %+.14Da\n", z1, z1);
-        printf ("expect: %+.16De = %+.14Da\n", z2, z2);
+        printf ("result: %+.16De = %+.13Da\n", z1, z1);
+        printf ("expect: %+.16De = %+.13Da\n", z2, z2);
         exit (1);
     }
 }
@@ -27,8 +27,8 @@ UU NI static void atest2_ulp (L x, L y, uint64_t ulp_max)
     {
         printf ("\n%s (%+.16De, %+.16De) ULPs %.0Df exceeds %llu ULPs\n",
                 S_FUN, x, y, ulp, ulp_max);
-        printf ("result: %+.16De = %+.14Da\n", z1, z1);
-        printf ("expect: %+.16De = %+.14Da\n", z2, z2);
+        printf ("result: %+.16De = %+.13Da\n", z1, z1);
+        printf ("expect: %+.16De = %+.13Da\n", z2, z2);
         exit (2);
     }
 }
@@ -55,8 +55,8 @@ UU NI static void atest2_rel (L x, L y, float rel_max)
     {
         printf ("\n%s (%+.16De, %+.16De) REL error %.3De exceeds %.3e\n",
                 S_FUN, x, y, rel, rel_max);
-        printf ("result: %+.16De = %+.14Da\n", z1, z1);
-        printf ("expect: %+.16De = %+.14Da\n", z2, z2);
+        printf ("result: %+.16De = %+.13Da\n", z1, z1);
+        printf ("expect: %+.16De = %+.13Da\n", z2, z2);
         exit (2);
     }
 }

@@ -8,8 +8,22 @@ UU NI static void atest1 (L x)
     if (! same (z1, z2))
     {
         printf ("\n%s (%+.16De)\n", S_FUN, x);
-        printf ("result: %+.16De = %+.14Da\n", z1, z1);
-        printf ("expect: %+.16De = %+.14Da\n", z2, z2);
+        printf ("result: %+.16De = %+.13Da\n", z1, z1);
+        printf ("expect: %+.16De = %+.13Da\n", z2, z2);
+        exit (1);
+    }
+}
+
+
+// Fail if fp64_FUN (x) != z
+UU NI static void atest1xy (L x, L z)
+{
+    L z1 = LFUN(FUN) (x);
+    if (! same (z1, z))
+    {
+        printf ("\n%s (%+.16De)\n", S_FUN, x);
+        printf ("result: %+.16De = %+.13Da\n", z1, z1);
+        printf ("expect: %+.16De = %+.13Da\n", z, z);
         exit (1);
     }
 }
@@ -27,8 +41,8 @@ UU NI static void atest1_ulp (L x, uint64_t ulp_max)
     {
         printf ("\n%s (%+.16De) ULPs %.0Df exceeds %llu ULPs\n",
                 S_FUN, x, ulp, ulp_max);
-        printf ("result: %+.16De = %+.14Da\n", z1, z1);
-        printf ("expect: %+.16De = %+.14Da\n", z2, z2);
+        printf ("result: %+.16De = %+.13Da\n", z1, z1);
+        printf ("expect: %+.16De = %+.13Da\n", z2, z2);
         exit (2);
     }
 }
@@ -55,8 +69,8 @@ UU NI static void atest1_rel (L x, float rel_max)
     {
         printf ("\n%s (%+.16De) REL error %.3De exceeds %.3e\n",
                 S_FUN, x, rel, rel_max);
-        printf ("result: %+.16De = %+.14Da\n", z1, z1);
-        printf ("expect: %+.16De = %+.14Da\n", z2, z2);
+        printf ("result: %+.16De = %+.13Da\n", z1, z1);
+        printf ("expect: %+.16De = %+.13Da\n", z2, z2);
         exit (2);
     }
 }

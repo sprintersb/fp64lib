@@ -49,7 +49,7 @@ const char *s_fun = NULL;
 
 // Return true iff X == Y on binary level, taking
 // any NaN as equal, but +0.0 != -0.0.
-NI static bool same (L x, L y)
+UU NI static bool same (L x, L y)
 {
     bool nan1 = fp64_isNaN (x);
     bool nan2 = fp64_isNaN (y);
