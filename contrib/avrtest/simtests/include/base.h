@@ -1,3 +1,6 @@
+#ifndef BASE_H
+#define BASE_H
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -57,3 +60,5 @@ UU NI static bool same (L x, L y)
         return nan1 + nan2 == 2;
     return fp64_compare (x, y) == 0;
 }
+
+#endif // BASE_H

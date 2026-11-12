@@ -121,7 +121,7 @@ while getopts $OPTS opt ; do
 done
 shift $((OPTIND - 1))
 
-test_list=${*:-"arith/*.c trig/*.c exp-log/*.c cycles/*.c"}
+test_list=${*:-"arith/*.c trig/*.c exp-log/*.c discrete/*.c cycles/*.c"}
 
 # -Wno-array-bounds: Ditch wrong warnings due to avr-gcc PR105523.
 # This works with more GCC versions than --param=min-pagesize=0.
