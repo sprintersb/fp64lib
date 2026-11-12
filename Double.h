@@ -261,6 +261,7 @@ class Double {
 		FP64LIB_IMPL (ceil)
 		FP64LIB_IMPL (cos)
 		FP64LIB_IMPL (cosh)
+		FP64LIB_IMPL (cospi)
 		FP64LIB_IMPL (cotan)
 		FP64LIB_IMPL (exp)
 		FP64LIB_IMPL (exp2)
@@ -274,9 +275,11 @@ class Double {
 		FP64LIB_IMPL (round)
 		FP64LIB_IMPL (sin)
 		FP64LIB_IMPL (sinh)
+		FP64LIB_IMPL (sinpi)
 		FP64LIB_IMPL (sqrt)
 		FP64LIB_IMPL (tan)
 		FP64LIB_IMPL (tanh)
+		FP64LIB_IMPL (tanpi)
 		FP64LIB_IMPL (trunc)
 #undef FP64LIB_IMPL
 
@@ -323,6 +326,12 @@ class Double {
 		}
 		static Double pow (const Double &x, const Double &y) {
 			return x.pow (y);
+		}
+		Double powi (int i) const {
+			return Double (fp64_powi (x, i));
+		}
+		static Double powi (const Double &x, int i) {
+			return x.powi (i);
 		}
 
 		// Misc signature

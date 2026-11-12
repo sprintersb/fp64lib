@@ -24,10 +24,15 @@
 # functions, use the size target:
 #
 # make size SYM='fp64_log fp64_log2' CFLAGS='-mno-relax'
+#
+# To check whether all the fp64_* functions can be linked, and to show
+# the size of all the fp64_* functions (including all depencencies), run:
+#
+# make link
 
 MCU = atmega328p
 
-RM := rm -rf
+RM := rm -f --
 XCC     = avr-gcc
 OBJDUMP = avr-objdump
 OBJCOPY = avr-objcopy
@@ -52,7 +57,9 @@ $(FP64_ASM_OBJECTS) : $(MAKEFILE_LIST)
 $(FP64_ASM_OBJECTS) : %-$(MCU).o : %.S
 	$(XCC) -mmcu=$(MCU) $(FP64FLAGS) -c $< -o $@
 
+libfp64-$(MCU).a: .EXTRA_PREREQS = force
 libfp64-$(MCU).a: $(FP64_ASM_OBJECTS)
+	-$(RM) $(wildcard $@)
 	$(AR) rcs $@ $^
 
 libfp64.a: libfp64-$(MCU).a force
@@ -62,14 +69,31 @@ wlu = -Wl,-u,
 SIZE_UNDEFS = $(patsubst %,$(wlu)%,$(SYM))
 
 size: size-$(MCU).elf
-	avr-size $<
+	$(OBJSIZE) $<
 
 size-$(MCU).elf: libfp64-$(MCU).a force
 	$(XCC) -mmcu=$(MCU) -o $@ $(FP64FLAGS) -nostartfiles -Wl,--defsym,main=0 $(SIZE_UNDEFS) -L. -lfp64-$(MCU)
 
+FGCC := $(shell grep GCC_ENTRY *.S | grep '\.S:GCC_ENTRY' | sed 's/.*GCC_ENTRY[ \t]*\([a-z_0-9]*\).*/\1/')
+
+GSYM := $(shell grep GCC_DEFSYM *.S  | grep '\.S:[ 	]*GCC_DEFSYM' | sed 's/.*GCC_DEFSYM[ \t]*\([a-z_0-9]*\).*/\1/')
+
+FUNC = $(shell $(OBJNM) $< | grep ' T fp64_' | cut -d ' ' -f 3)
+
+LINK_UNDEFS = $(patsubst %,$(wlu)%,$(FUNC) $(FGCC) $(GSYM))
+
+link: link-$(MCU).elf
+
+link-$(MCU).elf: libfp64-$(MCU).a force
+	$(XCC) -xc /dev/null -mmcu=$(MCU) -nostartfiles -o $@ -Wl,-Map,${@:.elf=.map} $(LINK_UNDEFS) $(CFLAGS) -L. -lfp64-$(MCU)
+	$(OBJDUMP) -d $@ > ${@:.elf=.lst}
+	$(OBJSIZE) $@
+	@(($(OBJNM) $@ | grep __f7_) && echo "error: found LibF7 stuff") || true
+
+
 clean: clean-libfp64
 
 clean-libfp64:
-	-$(RM) $(wildcard libfp64*.a fp64_*.[iso] size*.elf)
+	-$(RM) $(wildcard libfp64*.a fp64_*.[iso] *.elf *.map *.lst)
 
-.PHONY: all size force clean clean-libfp64
+.PHONY: all link size force clean clean-libfp64

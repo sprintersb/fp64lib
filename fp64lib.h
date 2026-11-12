@@ -196,6 +196,9 @@ float64_t fp64_tanh( float64_t x ) __ATTR_CONST__;
 float64_t fp64_asinh( float64_t x ) __ATTR_CONST__;
 float64_t fp64_acosh( float64_t x ) __ATTR_CONST__;
 float64_t fp64_atanh( float64_t x ) __ATTR_CONST__;
+float64_t fp64_sinpi( float64_t x ) __ATTR_CONST__; // C23
+float64_t fp64_cospi( float64_t x ) __ATTR_CONST__; // C23
+float64_t fp64_tanpi( float64_t x ) __ATTR_CONST__; // C23
 
 // functions with 2 arguments
 float64_t fp64_copysign (float64_t x, float64_t y) __ATTR_CONST__;
@@ -206,6 +209,7 @@ float64_t fp64_scalbn(float64_t x, int ex) __ATTR_CONST__; 		// [all added with 
 float64_t fp64_frexp( float64_t x, int *pexp );
 float64_t fp64_fdim( float64_t A, float64_t B ) __ATTR_CONST__;
 float64_t fp64_pow( float64_t x, float64_t y ) __ATTR_CONST__;
+float64_t fp64_powi( float64_t x, int y ) __ATTR_CONST__; // __builtin_powil
 float64_t fp64_hypot( float64_t x, float64_t y ) __ATTR_CONST__;
 float64_t fp64_atan2( float64_t y, float64_t x ) __ATTR_CONST__;
 float64_t fp64_modf (float64_t x, float64_t *iptr);
@@ -236,6 +240,8 @@ uint8_t  fp64_to_uint8( float64_t A) __ATTR_CONST__; 	// float_t to uint8_t
 
 float64_t fp64_sd( float x ) __ATTR_CONST__;					// float to float64_t
 float fp64_ds( float64_t x ) __ATTR_CONST__;					// float64_t to float
+
+float64_t fp64_divmod2( float64_t, int8_t expo2, int16_t *pquot );
 
 // to and from string
 char *fp64_to_decimalExp( float64_t x, uint8_t maxDigits, uint8_t expSep, int16_t *exp10 );
