@@ -179,7 +179,7 @@ Simulate_avrtest ()
     # on / off in the app with LOG_ON, LOG_OFF, LOG_PUSH_ON, LOG_POP etc.
 
     local cmd=$(${AVRTEST_HOME}/avrtest-elf $1 $LOG)
-    local msg=$($cmd -q -no-stdin $1 -m 600000000 $AARGS 2>&1)
+    msg=$($cmd -q -no-stdin $1 -m 600000000 $AARGS 2>&1)
     RETVAL=$?
 
     if [[ $FLAG_PRINT || $do_cycles ]]; then
