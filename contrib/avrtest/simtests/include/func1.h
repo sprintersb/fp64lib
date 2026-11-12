@@ -30,13 +30,17 @@ __asm (".pushsection .lowtext\n"
 
 #define printf(msg, ...)  avrtest_printf_P (PSTR (msg), ##__VA_ARGS__)
 
-#define L_pzero 	0x0000000000000000LLU	// +0.0
-#define L_mzero		0x8000000000000000LLU	// -0.0
+#define L_p0 		0x0000000000000000LLU	// +0.0
+#define L_m0		0x8000000000000000LLU	// -0.0
 #define L_nan		0x7fffffffffffffffLLU	// NaN
 #define L_pinf		0x7ff0000000000000LLU	// +INF
 #define L_minf      0xfff0000000000000LLU	// -INF
+#define L_p1		0x3ff0000000000000LLU	// +1.0
+#define L_m1        0xdff0000000000000LLU	// -1.0
 #define L_pbig		(L_pinf - 1)
 #define L_mbig		(L_minf - 1)
+#define L_ptiny		(0x0000000000000001LLU)
+#define L_mtiny		(0x8000000000000001LLU)
 
 
 const char *s_fun = NULL;

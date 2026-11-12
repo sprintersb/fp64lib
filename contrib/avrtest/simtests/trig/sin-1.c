@@ -10,8 +10,8 @@ int main (void)
     atest1 (L_nan);
     atest1 (L_pinf);
     atest1 (L_minf);
-    atest1 (L_pzero);
-    atest1 (L_mzero);
+    atest1 (L_p0);
+    atest1 (L_m0);
 
     return 0;
 }
