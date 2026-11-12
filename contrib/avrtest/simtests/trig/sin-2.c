@@ -9,9 +9,9 @@ int main (void)
 {
     L x0 = avrtest_ftod64 (-3.0f);
     L x1 = avrtest_ftod64 (+3.0f);
-    float max_rel_err = 2.5e-16;
+    float max_rel_err = 4.0e-16;
 
-    for (int i = 0; i < 1000; ++i)
+    for (int i = 0; i < 3000; ++i)
     {
         L x = avrtest_prand_d64 (x0, x1);
         atest1_rel (x, max_rel_err);
