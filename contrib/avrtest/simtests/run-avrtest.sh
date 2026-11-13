@@ -241,7 +241,7 @@ for test_file in $test_list ; do
 
 	    for mcu in ${MCUS-${MCU_LIST}} ; do
 		if [[ ! $do_cycles ]]; then
-		    echo -n "Simulate avrtest: $test_file "
+		    echo -n "Simulate: $test_file "
 		    echo -n "$mcu ... "
 		fi
 		if ! Compile $test_file $mcu $elf_file;
@@ -251,7 +251,7 @@ for test_file in $test_list ; do
 		    break
 		elif ! Simulate_avrtest $elf_file $mcu
 		then
-		    Err_echo "simulate avrtest failed: $RETVAL"
+		    Err_echo "simulate failed: $RETVAL"
 		    n_esimul=$(($n_esimul + 1))
 		else
 		    if [[ ! $do_cycles ]]; then
