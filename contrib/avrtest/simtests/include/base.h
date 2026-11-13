@@ -61,4 +61,11 @@ UU NI static bool same (L x, L y)
     return fp64_compare (x, y) == 0;
 }
 
+UU NI static uint64_t rand_u64 (void)
+{
+    uint32_t lo = avrtest_prand ();
+    uint32_t hi = avrtest_prand ();
+    return lo | ((uint64_t) hi << 32);
+}
+
 #endif // BASE_H
