@@ -30,7 +30,7 @@ UU NI static void atest1xy (L x, L z)
 
 
 // Fail if error in ULPs at X exceeds ULP_MAX.
-UU NI static void atest1_ulp (L x, uint64_t ulp_max)
+UU NI static bool atest1_ulp (L x, uint64_t ulp_max)
 {
     L z1 = LFUN(FUN) (x);
     L z2 = AFUN(FUN) (x);
@@ -45,6 +45,8 @@ UU NI static void atest1_ulp (L x, uint64_t ulp_max)
         printf ("expect: %+.16De = %+.13Da\n", z2, z2);
         exit (2);
     }
+
+    return ulp == 0;
 }
 
 
