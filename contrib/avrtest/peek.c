@@ -172,13 +172,13 @@ UU static void show_d8 (const peek_t *p, uint8_t reg, char id)
 {
     const L *f = (const L*) &p->r[reg];
     const uint64_t *i = (const uint64_t*) &p->r[reg];
-    printf ("%c = %.14Da = 0x%016llx = %.16Df\n", id, *f, *i, *f);
+    printf ("%c = %.13Da = 0x%016llx = %.16Dg\n", id, *f, *i, *f);
 }
 
 UU static void show_d10 (const peek_t *p, uint8_t reg, uint8_t r_expo, char id)
 {
     L d10 = dbl_10 (p, reg, r_expo);
-    printf ("%cX =% 23.16Df  S=%d  T=%d: (%02x) ",
+    printf ("%cX =% 23.16Dg  S=%d  T=%d: (%02x) ",
             id, d10, rbit (p, reg+7, 7), flagT(p), p->r[reg+7]);
     for (int8_t i = 6; i >= 0; --i)
         printf ("%02x,", p->r[reg + i]);
