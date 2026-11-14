@@ -221,3 +221,36 @@ void c_peekx (const peek_t *p)
     printf ("rA7 = %d, X = %d\n",
             (int8_t) p->r[25], *(const int*) & p->r[26]);
 }
+
+#define	rB7	17
+#define	rB6	16
+#define	rB5	15
+#define	rB4	14
+#define	rB3	13
+#define	rB2	12
+#define	rB1	11
+#define	rB0	10
+
+#define rR8 6
+#define rR7 7
+#define rR6 8
+#define rR5 9
+
+#define MM0 rR6 /* r8 */
+#define MM1 rR5 /* r9 = 1 + MM0 */
+#define MM2 rR8 /* r6 */
+#define MM3 rR7 /* r7 = 1 + MM2 */
+#define MM4 rB0
+#define MM5 rB1
+#define MM6 rB2
+#define MM7 rB3
+#define MM8 rB4
+
+void c_peekmm (const peek_t *p)
+{
+    printf ("    r%2d %2d %2d %2d %2d %2d %2d %2d %2d\n",
+            MM8, MM7, MM6, MM5, MM4, MM3, MM2, MM1, MM0);
+    printf ("MM = %02x %02x %02x %02x %02x %02x %02x %02x %02x\n",
+            p->r[MM8], p->r[MM7], p->r[MM6], p->r[MM5], p->r[MM4],
+            p->r[MM3], p->r[MM2], p->r[MM1], p->r[MM0]);
+}
