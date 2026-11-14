@@ -113,4 +113,6 @@ MAKE_PEEK peekc
 MAKE_PEEK peekax
 MAKE_PEEK peekbx
 
+MAKE_PEEK peekmm
+
 MAKE_PEEK peekx
