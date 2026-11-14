@@ -83,6 +83,7 @@ fi
 
 FLAG_STOP=			# Stop at any error
 FLAG_PRINT=			# Show what AVRtest prints
+AVRTEST_EXIT_NO_MPFR=97
 
 
 Usage ()
@@ -188,7 +189,7 @@ Simulate_avrtest ()
 	fi
     fi
 
-    [ $RETVAL -eq 0 ]
+    [ $RETVAL -eq 0 ] || [ $RETVAL -eq $AVRTEST_EXIT_NO_MPFR ]
 }
 
 
@@ -215,6 +216,7 @@ Extract_Directives ()
 n_files=0	# number of operated files
 n_emake=0	# number of compile/link errors
 n_esimul=0	# number of simulation errors
+n_skipped=0	# number of skipped tests because AVRtest misses features
 
 for test_file in $test_list ; do
     case "$test_file" in
@@ -254,7 +256,10 @@ for test_file in $test_list ; do
 		    Err_echo "simulate failed: $RETVAL"
 		    n_esimul=$(($n_esimul + 1))
 		else
-		    if [[ ! $do_cycles ]]; then
+		    if [[ $RETVAL == $AVRTEST_EXIT_NO_MPFR ]]; then
+			n_skipped=$(($n_skipped + 1))
+			echo "skipped: avrtest without MPFR"
+		    elif [[ ! $do_cycles ]]; then
 			echo "OK"
 		    else
 			# Only do cycles for the 1st MCU.
@@ -274,6 +279,9 @@ done
 
 echo "-------"
 echo "Done.  Number of operated files: $n_files"
+if [ $n_skipped -gt 0 ] ; then
+    echo "Number of skipped tests: $n_skipped"
+fi
 
 if [ $(($n_emake + $n_ehost + $n_esimul)) -gt 0 ] ; then
     [ $n_emake -gt 0 ]   && echo "*** Compile/link errors: $n_emake"
