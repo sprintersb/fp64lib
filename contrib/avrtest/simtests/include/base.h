@@ -14,6 +14,8 @@
 #define NI __attribute((noipa))
 #define UU __attribute((unused))
 
+#define AVRTEST_EXIT_NO_MPFR 97
+
 #define LFU_(fun) fp64_##fun
 #define LFUN(fun) LFU_ (fun)
 
