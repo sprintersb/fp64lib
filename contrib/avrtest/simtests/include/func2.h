@@ -10,7 +10,9 @@ UU NI static void atest2 (L x, L y)
         printf ("\n%s (%+.16De, %+.16De)\n", S_FUN, x, y);
         printf ("result: %+.16De = %+.13Da\n", z1, z1);
         printf ("expect: %+.16De = %+.13Da\n", z2, z2);
-        exit (1);
+
+        if (!dont_exit)
+            exit (1);
     }
 }
 
@@ -29,7 +31,9 @@ UU NI static bool atest2_ulp (L x, L y, uint64_t ulp_max)
                 S_FUN, x, y, ulp, ulp_max);
         printf ("result: %+.16De = %+.13Da\n", z1, z1);
         printf ("expect: %+.16De = %+.13Da\n", z2, z2);
-        exit (2);
+
+        if (!dont_exit)
+            exit (2);
     }
 
     return ulp == 0;
@@ -59,7 +63,9 @@ UU NI static void atest2_rel (L x, L y, float rel_max)
                 S_FUN, x, y, rel, rel_max);
         printf ("result: %+.16De = %+.13Da\n", z1, z1);
         printf ("expect: %+.16De = %+.13Da\n", z2, z2);
-        exit (2);
+
+        if (!dont_exit)
+            exit (2);
     }
 }
 

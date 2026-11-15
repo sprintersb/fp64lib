@@ -16,6 +16,8 @@
 
 #define AVRTEST_EXIT_NO_MPFR 97
 
+bool dont_exit;
+
 #define LFU_(fun) fp64_##fun
 #define LFUN(fun) LFU_ (fun)
 
