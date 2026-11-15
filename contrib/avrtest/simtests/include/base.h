@@ -30,6 +30,9 @@ bool dont_exit;
 
 #define ARRAY_SIZE(X) (sizeof (X) / sizeof (*X))
 
+// For array of string pointers.
+#define _(X) (const __flash char[]) { #X }
+
 #ifdef __AVR_HAVE_ELPM__
 // On devices with ELPM / RAMPZ, push code beyond 0x10000 for testing.
 __asm (".pushsection .lowtext\n"
