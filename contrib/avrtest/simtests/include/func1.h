@@ -95,7 +95,7 @@ UU NI static uint32_t atest1_cycles (L x)
 }
 
 
-// Show average and max cycles for NN quidistant x in [X0, X1].
+// Show average and max cycles for NN equidistant x in [X0, X1].
 // Show x value where the max cycles occured.
 UU NI static void atest1_show_cycles (L x0, L x1, uint32_t nn)
 {
@@ -104,6 +104,7 @@ UU NI static void atest1_show_cycles (L x0, L x1, uint32_t nn)
     L x_max = 0;
     uint64_t total = 0;
     uint32_t ma = 0;
+    uint32_t n_tests = 0;
     for (uint32_t n = 0; n <= nn; ++n)
     {
         L nsteps = avrtest_mul_d64 (step, avrtest_u32tod64 (n));
@@ -113,9 +114,10 @@ UU NI static void atest1_show_cycles (L x0, L x1, uint32_t nn)
         if (cyc > ma)
             ma = cyc, x_max = x;
         total += cyc;
+        n_tests += 1;
     }
 
-    float avr = avrtest_divf (avrtest_u64tof (total), avrtest_u32tof (1 + nn));
+    float avr = avrtest_divf (avrtest_u64tof (total), avrtest_u32tof (n_tests));
 
 #ifdef S_MCU
     printf ("%s ", S_MCU);
