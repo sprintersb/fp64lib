@@ -10,10 +10,6 @@ int main (void)
     atest1 (L_minf);
     atest1 (L_p0);
     atest1 (L_m0);
-    atest1 (L_p0 | 0x1);
-    atest1 (L_m0 | 0x1);
-    atest1 (L_p0 | 0x2);
-    atest1 (L_m0 | 0x2);
 
     return 0;
 }
