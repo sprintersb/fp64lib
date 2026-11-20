@@ -48,7 +48,7 @@ __asm (".pushsection .lowtext\n"
 #define L_pinf		0x7ff0000000000000LLU	// +INF
 #define L_minf      0xfff0000000000000LLU	// -INF
 #define L_p1		0x3ff0000000000000LLU	// +1.0
-#define L_m1        0xdff0000000000000LLU	// -1.0
+#define L_m1        0xbff0000000000000LLU	// -1.0
 #define L_pbig		(L_pinf - 1)
 #define L_mbig		(L_minf - 1)
 #define L_ptiny		(0x0000000000000001LLU)
