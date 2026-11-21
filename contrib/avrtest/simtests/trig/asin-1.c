@@ -11,5 +11,10 @@ int main (void)
     atest1 (L_p0);
     atest1 (L_m0);
 
+    atest1_ulp (L_m1, 1);
+    atest1_ulp (L_p1, 1);
+    atest1_ulp (L_m1 + 1, 1);
+    atest1_ulp (L_p1 + 1, 1);
+
     return 0;
 }
