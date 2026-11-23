@@ -1,24 +1,9 @@
 #include "base.h"
 
-#if defined(__WITH_DOUBLE_COMPARISON__)
-#if __WITH_DOUBLE_COMPARISON__ == 2
-#define DOUBLE_COMPARE_BOOL
-#endif
-#endif
+// Test boolean comparators.
 
-// Decouple fp64lib's build compiler ABI from the ABI of the testing compiler.
-
-#ifdef DOUBLE_COMPARE_BOOL
 #define PROTO(f, op)                                                \
     extern bool cmp_##f (L, L) __asm("__" #f "df2.bool");
-#else
-#define PROTO(f, op)                                                \
-    extern int8_t tricmp_##f (L, L) __asm("__" #f "df2.tristate");  \
-    static bool cmp_##f (L x, L y)                                  \
-    {                                                               \
-        return tricmp_##f (x, y) op 0;                              \
-    }
-#endif
 
 PROTO (ne, !=)
 PROTO (eq, ==)
@@ -42,12 +27,12 @@ PROTO (gt, >)
         }                                                               \
     }
 
-MK_CMP (ne, !=);
-MK_CMP (eq, ==);
-MK_CMP (le, <=);
-MK_CMP (lt, <);
-MK_CMP (ge, >=);
-MK_CMP (gt, >);
+MK_CMP (ne, !=)
+MK_CMP (eq, ==)
+MK_CMP (le, <=)
+MK_CMP (lt, <)
+MK_CMP (ge, >=)
+MK_CMP (gt, >)
 
 void test1 (L x, L y)
 {
